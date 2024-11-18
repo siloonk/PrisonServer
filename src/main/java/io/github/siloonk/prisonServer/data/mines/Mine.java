@@ -1,0 +1,135 @@
+package io.github.siloonk.prisonServer.data.mines;
+
+import io.github.siloonk.prisonServer.PrisonServer;
+import io.papermc.paper.math.BlockPosition;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.HashMap;
+import java.util.UUID;
+
+public class Mine {
+
+    private UUID owner;
+    private int width, height;
+    private Location centerLocation = new Location(null, 0, 0, 0);
+    private String worldName;
+    private Material blockType;
+
+    private double luckyBlockChance;
+
+    public Mine() {
+
+    }
+
+    public Mine(UUID owner, int width, int height, Location centerLocation, Material blockType, double luckyBlockChance) {
+        this.owner = owner;
+        this.width = width;
+        this.height=  height;
+        this.centerLocation = centerLocation;
+        this.worldName = centerLocation.getWorld().getName();
+        this.blockType = blockType;
+        this.luckyBlockChance = luckyBlockChance;
+    }
+
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setCenterLocation(Location centerLocation) {
+        this.centerLocation = centerLocation;
+    }
+
+    public void setWorldName(String worldName) {
+        this.worldName = worldName;
+    }
+
+    public void setBlockType(Material blockType) {
+        this.blockType = blockType;
+    }
+
+    public void setLuckyBlockChance(double luckyBlockChance) {
+        this.luckyBlockChance = luckyBlockChance;
+    }
+
+    public UUID getOwner() {
+        return owner;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Location getCenterLocation() {
+        if (centerLocation.getWorld() == null) centerLocation.setWorld(Bukkit.getWorld(worldName));
+        return centerLocation;
+    }
+
+    public String getWorldName() {
+        return worldName;
+    }
+
+    public Material getBlockType() {
+        return blockType;
+    }
+
+    public double getLuckyBlockChance() {
+        return luckyBlockChance;
+    }
+
+    public void setX(int x) {
+        centerLocation.setX(x);
+    }
+
+    public void setY(int y) {
+        centerLocation.setY(y);
+    }
+
+    public void setZ(int z) {
+        centerLocation.setZ(z);
+    }
+
+    public void displayMineToPlayer(Player player) {
+        new BukkitRunnable() {
+            private HashMap<Location, BlockData> blockUpdates=  new HashMap<>();
+            private final BlockData blockData = blockType.createBlockData();
+
+            @Override
+            public void run() {
+                for (int x = centerLocation.getBlockX() - width/2; x <= centerLocation.getBlockX() + width / 2; x++) {
+                    for (int y = centerLocation.getBlockY(); y > centerLocation.getBlockY() - height; y--) {
+                        for (int z = centerLocation.getBlockZ() - width/2; z <= centerLocation.getBlockZ() + width/2; z++) {
+                            blockUpdates.put(new Location(centerLocation.getWorld(), x, y, z), blockData);
+                        }
+                    }
+                }
+
+                player.sendMultiBlockChange(blockUpdates, true);
+            }
+        }.runTaskAsynchronously(PrisonServer.getInstance());
+
+    }
+
+
+    public boolean isWithin(Location loc) {
+        return (loc.getBlockX() >= centerLocation.getBlockX() - width/2 && loc.getBlockX() <= centerLocation.getBlockX() + width/2)
+                && (loc.getBlockY() >= centerLocation.getBlockY() - height && loc.getBlockY() <= centerLocation.getBlockY())
+                && (loc.getBlockZ() >= centerLocation.getBlockZ() - width/2 && loc.getBlockZ() <= centerLocation.getBlockZ() + width/2);
+    }
+}

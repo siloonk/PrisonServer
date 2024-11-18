@@ -1,0 +1,6 @@
+name: PrisonServer
+version: '1.0-SNAPSHOT'
+main: io.github.siloonk.prisonServer.PrisonServer
+api-version: '1.21'
+load: STARTUP
+authors: [ siloonk ]

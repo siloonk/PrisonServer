@@ -1,0 +1,53 @@
+#
+# Every available setting is already being used in the default config unless specified otherwise
+#
+
+EXPLOSIVE:
+  name: <gray>Explosive
+  description: <white>Chance to create a big explosion causing all blocks in it's path to shatter
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+  radius: 15
+
+JACKHAMMER:
+  name: <gray>Jackhammer
+  description: <white>Chance to destroy a whole layer of your mine!
+  max_level: 10000
+  base_cost: 10000
+  cost_increase:  100
+  chance_at_max_level: 100
+  base_chance: 100
+
+LUCKY:
+  name: <gray>Lucky
+  description: <white>Chance to gain a random amount of tokens!
+  max_level: 10000
+  base_cost: 10000
+  cost_increase:  100
+  chance_at_max_level: 100
+  base_chance: 100
+  min_amount: 10000
+  max_amount: 50000
+  scale_amount: 1.01 # how much should it increase each level!
+
+FORTUNE:
+  name: <gray>Fortune
+  description: <white>Get more blocks while mining!
+  max_level: 10000
+  base_cost: 10000
+  cost_increase:  100
+  base_chance: 100
+
+
+LIGHTNING:
+  name: <gray>Lightning
+  description: <white>Chance for lightning to be summoned and create a massive explosion!
+  max_level: 10000
+  base_cost: 10000
+  cost_increase:  100
+  chance_at_max_level: 100
+  base_chance: 100
+  radius: 10
