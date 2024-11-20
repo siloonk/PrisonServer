@@ -1,8 +1,9 @@
-package io.github.siloonk.prisonServer.enchantments;
+package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,7 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
-public class JackhammerEnchantment extends Enchantment{
+public class JackhammerEnchantment extends Enchantment {
 
     public JackhammerEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance) {
         super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);

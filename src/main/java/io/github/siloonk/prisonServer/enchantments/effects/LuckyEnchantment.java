@@ -1,7 +1,8 @@
-package io.github.siloonk.prisonServer.enchantments;
+package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.Util;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Random;
 
-public class LuckyEnchantment extends Enchantment{
+public class LuckyEnchantment extends Enchantment {
 
     private int minAmount;
     private int maxAmount;
@@ -32,7 +33,6 @@ public class LuckyEnchantment extends Enchantment{
         int amount = (int) (random.nextInt(minAmount, maxAmount) * player.getPersonalMultiplier() * (scaleAmount * level));
         player.setTokens(player.getTokens() + amount);
         Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
-        Title title = Title.title(miniMessage.deserialize("<dark_purple><bold>Lucky"), miniMessage.deserialize(String.format("<light_purple>You have found %s Tokens!", Util.formatNumber(amount, 0))));
-        bukkitPlayer.showTitle(title);
+        bukkitPlayer.sendActionBar(miniMessage.deserialize(String.format("<dark_purple><bold>Lucky<reset> <gray>» <gray>You have found <light_purple>%s Tokens<gray>!", Util.formatNumber(amount, 0))));
     }
 }

@@ -2,11 +2,11 @@ package io.github.siloonk.prisonServer.enchantments;
 
 import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.enchantments.effects.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.data.type.Light;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -121,6 +121,18 @@ public class EnchantmentHandler implements Listener {
                     int radius = enchantConfig.getInt("radius");
                     registerEnchantment(type, new LightningEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
                 }
+                case EnchantmentType.ECLIPSE ->  {
+                    int radius = enchantConfig.getInt("radius");
+                    registerEnchantment(type, new EclipseEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
+                }
+                case EnchantmentType.STAR_CORE -> {
+                    ArrayList<String> rewards = (ArrayList<String>) enchantConfig.getStringList("rewards");
+                    registerEnchantment(type, new StarCoreEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, rewards));
+                }
+                case EnchantmentType.COSMIC_RIFT -> {
+                    int radius = enchantConfig.getInt("radius");
+                    registerEnchantment(type, new CosmicRiftEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
+                }
             }
         }
     }
@@ -132,6 +144,9 @@ public class EnchantmentHandler implements Listener {
         if (enchantment instanceof LuckyEnchantment) return PDCKeys.LUCKY_KEY;
         if (enchantment instanceof FortuneEnchantment) return PDCKeys.FORTUNE_KEY;
         if (enchantment instanceof LightningEnchantment) return PDCKeys.LIGHTNING_KEY;
+        if (enchantment instanceof EclipseEnchantment) return PDCKeys.ECLIPSE_KEY;
+        if (enchantment instanceof StarCoreEnchantment) return PDCKeys.STAR_CORE_KEY;
+        if (enchantment instanceof CosmicRiftEnchantment) return PDCKeys.COSMIC_RIFT_KEY;
         return null;
     }
 

@@ -38,9 +38,8 @@ FORTUNE:
   description: <white>Get more blocks while mining!
   max_level: 10000
   base_cost: 10000
-  cost_increase:  100
+  cost_increase: 100
   base_chance: 100
-
 
 LIGHTNING:
   name: <gray>Lightning
@@ -51,3 +50,90 @@ LIGHTNING:
   chance_at_max_level: 100
   base_chance: 100
   radius: 10
+
+ECLIPSE:
+  name: <gray>Eclipse
+  description: <white>Chance to create a shadow zone around the mined block, breaking everything within the zone radius.
+  max_level: 10000
+  base_cost: 10000
+  cost_increase:  100
+  chance_at_max_level: 100
+  base_chance: 10
+  radius: 10
+
+QUANTUM_MINER:
+  name: <gray>Quantum Miner
+  description: <white>Each mined block has a chance to clone itself into 2-5 additional blocks in your inventory/backpack
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+  min_blocks: 2 # These values are INCLUSIVE
+  max_blocks: 5
+
+AETHER_SURGE:
+  name: <gray>Aether Surge
+  description: <white>Occasionally creates an aether storm while mining, boosting rewards for a short time.
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+
+STAR_CORE:
+  name: <gray>Star Core
+  description: <white>Has a small chance to spawn a Star Core, a rare consumable block that can be broken for ultra-valuable rewards!
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+  rewards:
+    - /give %player% diamond_pickaxe 1
+
+COSMIC_RIFT:
+  name: <gray>Cosmic Rift
+  description: <white>Creates a temporary portal that sucks up blocks in a large sphere!
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+  radius: 20
+
+STAR_FALL:
+  name: <gray>Starfall
+  description: <white>Summons shooting stars that break blocks in random patterns!
+  max_leveL: 10000
+  base_cost: 10000
+  cost_increases: 100
+  chance_at_max_level: 100
+  base_chance: 100
+
+RELIC_SEEKER:
+  name: <gray>Relic Seeker
+  description: <white>Has a small chance to drop an ancient relic, which can be traded for high rewards!
+  max_level: 10000
+  base_cost: 10000
+  cost_increases: 100
+  chance_at_max_level: 100
+  base_chance: 100
+
+COSMIC_BLESSING:
+  name: <gray>Cosmic Blessing
+  description: <white>Occasionally grants random buffs or boosts
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+
+OMNI_TREASURE:
+  name: <gray>Omni Treasure
+  description: <white>Mined blocks have a very rare chance to drop an Omni crate, containing items, tokens, money and EXP
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100

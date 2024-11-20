@@ -5,5 +5,14 @@ public enum EnchantmentType {
     JACKHAMMER,
     FORTUNE,
     LUCKY,
-    LIGHTNING;
+    LIGHTNING,
+    ECLIPSE,
+    QUANTUM_MINER,
+    AETHER_SURGE,
+    STAR_CORE,
+    COSMIC_RIFT,
+    STAR_FALL,
+    RELIC_SEEKER,
+    COSMIC_BLESSING,
+    OMNI_TREASURE;
 }

@@ -18,8 +18,14 @@ public class TestExplosiveCommand extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
         ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE);
-        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LIGHTNING), 1000);
-        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LUCKY), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LIGHTNING), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LUCKY), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.STAR_CORE), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.ECLIPSE), 1000);
+        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.COSMIC_RIFT), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.EXPLOSIVE), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.JACKHAMMER), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LIGHTNING), 1000);
         Player player = (Player) sender;
         player.getInventory().addItem(item);
         return true;

@@ -7,8 +7,8 @@ import java.util.UUID;
 public class PrisonPlayer {
 
     private UUID uuid;
-    private int money;
-    private int tokens;
+    private long money;
+    private long tokens;
 
     private int blocksMined;
 
@@ -23,7 +23,7 @@ public class PrisonPlayer {
 
     }
 
-    public PrisonPlayer(UUID uuid, int money, int tokens, int blocksMined, Timestamp timeJoined, int level, int prestige) {
+    public PrisonPlayer(UUID uuid, long money, long tokens, int blocksMined, Timestamp timeJoined, int level, int prestige) {
         this.uuid = uuid;
         this.money = money;
         this.tokens = tokens;
@@ -43,19 +43,19 @@ public class PrisonPlayer {
         this.uuid = uuid;
     }
 
-    public int getMoney() {
+    public long getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(long money) {
         this.money = money;
     }
 
-    public int getTokens() {
+    public long getTokens() {
         return tokens;
     }
 
-    public void setTokens(int tokens) {
+    public void setTokens(long tokens) {
         this.tokens = tokens;
     }
 
