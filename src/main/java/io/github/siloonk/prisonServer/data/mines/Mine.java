@@ -9,6 +9,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -21,6 +22,8 @@ public class Mine {
     private Material blockType;
 
     private double luckyBlockChance;
+
+    private ArrayList<Location> starCores = new ArrayList<>();
 
     public Mine() {
 
@@ -79,6 +82,18 @@ public class Mine {
     public Location getCenterLocation() {
         if (centerLocation.getWorld() == null) centerLocation.setWorld(Bukkit.getWorld(worldName));
         return centerLocation;
+    }
+
+    public void addStarCore(Location loc) {
+        this.starCores.add(loc);
+    }
+
+    public void removeStarCore(Location loc) {
+        this.starCores.remove(loc);
+    }
+
+    public boolean isStarCore(Location loc) {
+        return starCores.stream().anyMatch(c -> c.equals(loc));
     }
 
     public String getWorldName() {

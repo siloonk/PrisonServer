@@ -5,6 +5,7 @@ import io.github.siloonk.prisonServer.commands.TestMineCommand;
 import io.github.siloonk.prisonServer.data.mines.MineManager;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
+import io.github.siloonk.prisonServer.listeners.BlockBreakListener;
 import io.github.siloonk.prisonServer.listeners.PlayerJoinListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -58,6 +59,7 @@ public final class PrisonServer extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(enchantmentHandler, this);
+        pm.registerEvents(new BlockBreakListener(), this);
     }
 
     private void registerCommands() {

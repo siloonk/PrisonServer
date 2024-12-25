@@ -20,9 +20,10 @@ public class TestExplosiveCommand extends Command {
         ItemStack item = new ItemStack(Material.DIAMOND_PICKAXE);
 //        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LIGHTNING), 1000);
 //        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LUCKY), 1000);
-//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.STAR_CORE), 1000);
+        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.STAR_CORE), 1000);
 //        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.ECLIPSE), 1000);
-        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.COSMIC_RIFT), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.COSMIC_RIFT), 1000);
+//        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.STAR_FALL), 1000);
 //        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.EXPLOSIVE), 1000);
 //        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.JACKHAMMER), 1000);
 //        EnchantmentHandler.applyEnchantment((Player) sender, item, EnchantmentHandler.getEnchantment(EnchantmentType.LIGHTNING), 1000);

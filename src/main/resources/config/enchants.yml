@@ -80,6 +80,7 @@ AETHER_SURGE:
   cost_increase: 100
   chance_at_max_level: 100
   base_chance: 100
+  boost_amount: 5
 
 STAR_CORE:
   name: <gray>Star Core
@@ -90,7 +91,7 @@ STAR_CORE:
   chance_at_max_level: 100
   base_chance: 100
   rewards:
-    - /give %player% diamond_pickaxe 1
+    - give %player% diamond_pickaxe 1
 
 COSMIC_RIFT:
   name: <gray>Cosmic Rift
@@ -105,7 +106,7 @@ COSMIC_RIFT:
 STAR_FALL:
   name: <gray>Starfall
   description: <white>Summons shooting stars that break blocks in random patterns!
-  max_leveL: 10000
+  max_level: 10000
   base_cost: 10000
   cost_increases: 100
   chance_at_max_level: 100

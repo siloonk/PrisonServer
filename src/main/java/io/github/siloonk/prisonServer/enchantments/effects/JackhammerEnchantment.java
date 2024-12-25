@@ -37,7 +37,7 @@ public class JackhammerEnchantment extends Enchantment {
 
 
                 player.setTokens(player.getTokens() + blockChanges.size()); // Add tokens
-                player.setMoney(player.getMoney() + blockChanges.size()); // Add money
+                player.addBlocks(blockChanges.size());
                 Bukkit.getPlayer(player.getUuid()).sendMultiBlockChange(blockChanges, true);
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());

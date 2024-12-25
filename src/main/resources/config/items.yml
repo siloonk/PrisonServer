@@ -1,0 +1,7 @@
+RELIC:
+  name: <purple>Relic
+  material: NETHER_STAR
+  lore:
+    - "test"
+    - "test"
+  shiny: false

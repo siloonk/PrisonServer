@@ -44,6 +44,8 @@ public class ExplosiveEnchantment extends Enchantment {
                     }
                 }
                 Bukkit.getPlayer(player.getUuid()).sendMultiBlockChange(blockChanges, true);
+                player.addBlocks(blockChanges.size());
+                player.setTokens(player.getTokens() + blockChanges.size());
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
         blockLocation.getWorld().createExplosion(blockLocation, 0f);

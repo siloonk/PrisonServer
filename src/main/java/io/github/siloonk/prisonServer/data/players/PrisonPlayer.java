@@ -1,7 +1,8 @@
 package io.github.siloonk.prisonServer.data.players;
 
-import org.jdbi.v3.core.mapper.reflect.ColumnName;
+import io.github.siloonk.prisonServer.data.Booster;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class PrisonPlayer {
@@ -19,6 +20,11 @@ public class PrisonPlayer {
 
     private float personalMultiplier;
 
+    private int freeBackpackSlots;
+    private int totalBackpackSlots;
+
+    private ArrayList<Booster> boosters = new ArrayList<>();
+
     public PrisonPlayer() {
 
     }
@@ -31,6 +37,8 @@ public class PrisonPlayer {
         this.timeJoined = timeJoined;
         this.level = level;
         this.prestige = prestige;
+        this.totalBackpackSlots = 500;
+        this.freeBackpackSlots = totalBackpackSlots;
 
         this.personalMultiplier = 1;
     }
@@ -97,5 +105,41 @@ public class PrisonPlayer {
 
     public void setPersonalMultiplier(float personalMultiplier) {
         this.personalMultiplier = personalMultiplier;
+    }
+
+    public ArrayList<Booster> getBoosters() {
+        return boosters;
+    }
+
+    public void addBooster(Booster booster) {
+        this.boosters.add(booster);
+    }
+
+    public int getFreeBackpackSlots() {
+        return freeBackpackSlots;
+    }
+
+    public void setFreeBackpackSlots(int freeBackpackSlots) {
+        this.freeBackpackSlots = freeBackpackSlots;
+    }
+
+    public int getTotalBackpackSlots() {
+        return totalBackpackSlots;
+    }
+
+    public void setTotalBackpackSlots(int totalBackpackSlots) {
+        this.totalBackpackSlots = totalBackpackSlots;
+    }
+
+    public void addBlocks(int blocks) {
+        if (this.freeBackpackSlots < 0) {
+            return;
+        }
+
+        if (this.freeBackpackSlots - blocks < 0) {
+            this.freeBackpackSlots = 0;
+        }
+
+        this.freeBackpackSlots -= blocks;
     }
 }

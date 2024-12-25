@@ -11,17 +11,17 @@ import java.util.List;
 
 public interface PlayerDAO {
 
-    @SqlUpdate("CREATE TABLE IF NOT EXISTS players (uuid TEXT PRIMARY KEY, money INTEGER, tokens INTEGER, blocks_mined INTEGER, time_joined TIMESTAMP, level INTEGER, prestige INTEGER, personal_multiplier NUMBER)")
+    @SqlUpdate("CREATE TABLE IF NOT EXISTS players (uuid TEXT PRIMARY KEY, money INTEGER, tokens INTEGER, blocks_mined INTEGER, time_joined TIMESTAMP, level INTEGER, prestige INTEGER, personal_multiplier NUMBER, free_bp_slots INTEGER, total_bp_slots INTEGER)")
     void createTable();
 
 
-    @SqlUpdate("INSERT INTO players (uuid, money, tokens, blocks_mined, time_joined, level, prestige, personal_multiplier) " +
-            "VALUES(:uuid, :money, :tokens, :blocksMined, :timeJoined, :level, :prestige, :personalMultiplier)")
+    @SqlUpdate("INSERT INTO players (uuid, money, tokens, blocks_mined, time_joined, level, prestige, personal_multiplier, free_bp_slots, total_bp_slots) " +
+            "VALUES(:uuid, :money, :tokens, :blocksMined, :timeJoined, :level, :prestige, :personalMultiplier, :freeBackpackSlots, :totalBackpackSlots)")
     void insertPlayer(@BindBean PrisonPlayer player);
 
 
     @SqlUpdate("UPDATE players SET uuid=:uuid, money=:money, tokens=:tokens, blocks_mined=:blocksMined, " +
-            "time_joined=:timeJoined, level=:level, prestige=:prestige, personal_multiplier=:personalMultiplier WHERE uuid=:uuid")
+            "time_joined=:timeJoined, level=:level, prestige=:prestige, personal_multiplier=:personalMultiplier, free_bp_slots=:freeBackpackSlots, total_bp_slots=:totalBackpackSlots WHERE uuid=:uuid")
     void update(@BindBean PrisonPlayer player);
 
 

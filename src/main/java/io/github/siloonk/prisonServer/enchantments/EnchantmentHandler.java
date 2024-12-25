@@ -57,6 +57,7 @@ public class EnchantmentHandler implements Listener {
             int level = enchantsContainer.get(key, PersistentDataType.INTEGER);
             double chance = enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel());
 
+
             // Random value to determine success
             Random random = new Random();
             double roll = random.nextDouble(); // Generates a value between 0.0 and 1.0
@@ -133,6 +134,27 @@ public class EnchantmentHandler implements Listener {
                     int radius = enchantConfig.getInt("radius");
                     registerEnchantment(type, new CosmicRiftEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
                 }
+                case EnchantmentType.STAR_FALL -> {
+                    registerEnchantment(type, new StarFallEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                }
+                case EnchantmentType.RELIC_SEEKER -> {
+                    registerEnchantment(type, new RelicSeekerEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                }
+                case EnchantmentType.COSMIC_BLESSING -> {
+                    double minBooster = enchantConfig.getDouble("min_multiplier");
+                    double maxBooster = enchantConfig.getDouble("max_multiplier");
+                    registerEnchantment(type, new CosmicBlessingEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, minBooster, maxBooster));
+                }
+                case EnchantmentType.OMNI_TREASURE -> {
+                    registerEnchantment(type, new OmniTreasureEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                }
+                case EnchantmentType.AETHER_SURGE -> {
+                    double boostAmount = enchantConfig.getDouble("boost_amount");
+                    registerEnchantment(type, new AetherSurgeEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, boostAmount));
+                }
+                case EnchantmentType.ECHO_OF_THE_DEEP -> {
+                    registerEnchantment(type, new EchoOfTheDeepEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                }
             }
         }
     }
@@ -147,6 +169,12 @@ public class EnchantmentHandler implements Listener {
         if (enchantment instanceof EclipseEnchantment) return PDCKeys.ECLIPSE_KEY;
         if (enchantment instanceof StarCoreEnchantment) return PDCKeys.STAR_CORE_KEY;
         if (enchantment instanceof CosmicRiftEnchantment) return PDCKeys.COSMIC_RIFT_KEY;
+        if (enchantment instanceof StarFallEnchantment) return PDCKeys.STAR_FALL_KEY;
+        if (enchantment instanceof RelicSeekerEnchantment) return PDCKeys.RELIC_SEEKER_KEY;
+        if (enchantment instanceof CosmicBlessingEnchantment) return PDCKeys.COSMIC_BLESSING_KEY;
+        if (enchantment instanceof AetherSurgeEnchantment) return PDCKeys.AETHER_SURGE_KEY;
+        if (enchantment instanceof OmniTreasureEnchantment) return PDCKeys.OMNI_TREASURE;
+        if (enchantment instanceof EchoOfTheDeepEnchantment) return PDCKeys.ECHO_OF_THE_DEEP;
         return null;
     }
 

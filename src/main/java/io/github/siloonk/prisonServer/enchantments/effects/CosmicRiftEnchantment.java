@@ -73,6 +73,8 @@ public class CosmicRiftEnchantment extends Enchantment {
 
                             BlockData blockType = mine.getBlockType().createBlockData();
                             bukkitPlayer.sendBlockChange(newLoc, Material.AIR.createBlockData());
+                            player.addBlocks(1);
+                            player.setTokens(player.getTokens() + 1);
 
                             if (Math.random() > 0.05) continue;
                             BlockDisplay display = blockLocation.getWorld().spawn(newLoc, BlockDisplay.class, entity -> {

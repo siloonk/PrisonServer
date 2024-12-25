@@ -23,6 +23,7 @@ public class PDCKeys {
     public static final NamespacedKey RELIC_SEEKER_KEY = new NamespacedKey("prisons", "relic_seeker");
     public static final NamespacedKey COSMIC_BLESSING_KEY = new NamespacedKey("prisons", "cosmic_blessing");
     public static final NamespacedKey OMNI_TREASURE = new NamespacedKey("prisons", "omni_treasure");
+    public static final NamespacedKey ECHO_OF_THE_DEEP = new NamespacedKey("prisons", "echo_of_the_deep");
 
 
     public static final NamespacedKey PICKAXE_EXP_KEY = new NamespacedKey("prisons", "pickaxe_exp");

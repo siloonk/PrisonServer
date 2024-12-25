@@ -48,7 +48,7 @@ public class EclipseEnchantment extends Enchantment {
             @Override
             public void run() {
                 if (timesRan >= 10) {
-                    removeAllBlocks(blockLocation, bukkitPlayer);
+                    removeAllBlocks(blockLocation, bukkitPlayer, player);
                     bukkitPlayer.setPlayerTime(6000, false);
                     cancel();
                 }
@@ -67,13 +67,15 @@ public class EclipseEnchantment extends Enchantment {
 
 
                 bukkitPlayer.sendMultiBlockChange(blockChanges);
+                player.addBlocks(blockChanges.size());
+                player.setTokens(player.getTokens() + blockChanges.size());
                 blockChanges.clear();
                 timesRan++;
             }
         }.runTaskTimer(PrisonServer.getInstance(), 0L, 20L);
     }
 
-    private void removeAllBlocks(Location blockLocation, Player player) {
+    private void removeAllBlocks(Location blockLocation, Player player, PrisonPlayer prisonPlayer) {
         BlockData data = Material.AIR.createBlockData();
         new BukkitRunnable() {
 
@@ -86,6 +88,8 @@ public class EclipseEnchantment extends Enchantment {
                 }
 
                 player.sendMultiBlockChange(blockChanges);
+                prisonPlayer.addBlocks(blockChanges.size());
+
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
     }

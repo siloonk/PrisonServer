@@ -48,6 +48,8 @@ public class LightningEnchantment extends Enchantment {
 
                 Player bukkitPlayer= Bukkit.getPlayer(player.getUuid());
                 bukkitPlayer.sendMultiBlockChange(blockChanges);
+                player.setTokens(player.getTokens() + blockChanges.size());
+                player.addBlocks(blockChanges.size());
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
     }

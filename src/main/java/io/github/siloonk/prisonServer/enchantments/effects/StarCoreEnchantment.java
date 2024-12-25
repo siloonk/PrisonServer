@@ -9,7 +9,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
@@ -45,7 +44,14 @@ public class StarCoreEnchantment extends Enchantment {
         loc.getWorld().createExplosion(loc, 0f);
 
         bukkitPlayer.sendBlockChange(loc, blockData);
+        player.setTokens(player.getTokens() + 1);
+        player.addBlocks(1);
+        mine.addStarCore(loc);
         bukkitPlayer.sendActionBar(miniMessage.deserialize("<dark_purple><bold>Star Core<reset> <gray>» A <light_purple>Star Core<gray> has been spawned somewhere in your mine!"));
 
+    }
+
+    public ArrayList<String> getRewards() {
+        return rewards;
     }
 }

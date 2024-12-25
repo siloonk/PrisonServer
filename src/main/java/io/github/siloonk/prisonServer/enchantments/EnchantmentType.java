@@ -14,5 +14,6 @@ public enum EnchantmentType {
     STAR_FALL,
     RELIC_SEEKER,
     COSMIC_BLESSING,
-    OMNI_TREASURE;
+    OMNI_TREASURE,
+    ECHO_OF_THE_DEEP;
 }
