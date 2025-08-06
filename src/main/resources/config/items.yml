@@ -5,3 +5,11 @@ RELIC:
     - "test"
     - "test"
   shiny: false
+
+
+BACKGROUND_ITEM:
+  name: ""
+  material: BLACK_STAINED_GLASS_PANE
+  lore:
+    - ""
+  shiny: false

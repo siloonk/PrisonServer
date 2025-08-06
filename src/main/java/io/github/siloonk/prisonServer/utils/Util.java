@@ -1,4 +1,11 @@
-package io.github.siloonk.prisonServer;
+package io.github.siloonk.prisonServer.utils;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
@@ -14,5 +21,13 @@ public class Util {
                         (int) d * 10 / 10 : d + "" // (int) d * 10 / 10 drops the decimal
                 ) + "" + c[iteration]
                 : formatNumber(d, iteration+1);
+    }
+
+    public static ArrayList<Component> convertStringListToComponentList(List<String> list) {
+        ArrayList<Component> components = new ArrayList<>();
+        for (String line : list) {
+            components.add(MiniMessage.miniMessage().deserialize(line));
+        }
+        return components;
     }
 }

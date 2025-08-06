@@ -1,11 +1,10 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
-import io.github.siloonk.prisonServer.Util;
+import io.github.siloonk.prisonServer.utils.Util;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

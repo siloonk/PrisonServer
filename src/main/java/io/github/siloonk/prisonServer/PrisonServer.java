@@ -2,9 +2,11 @@ package io.github.siloonk.prisonServer;
 
 import io.github.siloonk.prisonServer.commands.TestExplosiveCommand;
 import io.github.siloonk.prisonServer.commands.TestMineCommand;
+import io.github.siloonk.prisonServer.crates.CratesManager;
 import io.github.siloonk.prisonServer.data.mines.MineManager;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
+import io.github.siloonk.prisonServer.items.CustomItems;
 import io.github.siloonk.prisonServer.listeners.BlockBreakListener;
 import io.github.siloonk.prisonServer.listeners.PlayerJoinListener;
 import org.bukkit.plugin.PluginManager;
@@ -17,6 +19,8 @@ public final class PrisonServer extends JavaPlugin {
     private PrisonPlayerManager prisonPlayerManager;
     private MineManager mineManager;
     private EnchantmentHandler enchantmentHandler;
+    private CustomItems customItems;
+    private CratesManager cratesManager;
 
     @Override
     public void onEnable() {
@@ -25,6 +29,8 @@ public final class PrisonServer extends JavaPlugin {
         prisonPlayerManager = new PrisonPlayerManager();
         mineManager = new MineManager();
         enchantmentHandler = new EnchantmentHandler();
+        customItems = new CustomItems();
+        cratesManager = new CratesManager();
         registerEvents();
         registerCommands();
     }
@@ -54,6 +60,13 @@ public final class PrisonServer extends JavaPlugin {
         return enchantmentHandler;
     }
 
+    public CustomItems getCustomItems() {
+        return customItems;
+    }
+
+    public CratesManager getCratesManager() {
+        return cratesManager;
+    }
 
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();

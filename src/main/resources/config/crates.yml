@@ -1,0 +1,11 @@
+Common:
+  display_name: <green>Common Crate
+  menu:
+    rows: 3 # all values from 1-6
+    background: BACKGROUND_ITEM
+    '11': RELIC
+
+  rewards:
+    '1':
+      weight: 50
+      command: "sdklfjsdkf"
