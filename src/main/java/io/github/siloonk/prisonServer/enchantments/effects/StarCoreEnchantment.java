@@ -1,7 +1,9 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
+import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
@@ -23,8 +25,8 @@ public class StarCoreEnchantment extends Enchantment {
     private BlockData blockData = Material.END_STONE.createBlockData();
     private MiniMessage miniMessage = MiniMessage.miniMessage();
 
-    public StarCoreEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, ArrayList<String> rewards) {
-        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);
+    public StarCoreEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, ArrayList<String> rewards, Currency currency) {
+        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);
         this.rewards = rewards;
     }
 
@@ -44,7 +46,7 @@ public class StarCoreEnchantment extends Enchantment {
         loc.getWorld().createExplosion(loc, 0f);
 
         bukkitPlayer.sendBlockChange(loc, blockData);
-        player.setTokens(player.getTokens() + 1);
+        player.setTokens(player.getTokens() + Math.round(player.getMultiplier(BoosterType.TOKENS)));
         player.addBlocks(1);
         mine.addStarCore(loc);
         bukkitPlayer.sendActionBar(miniMessage.deserialize("<dark_purple><bold>Star Core<reset> <gray>» A <light_purple>Star Core<gray> has been spawned somewhere in your mine!"));

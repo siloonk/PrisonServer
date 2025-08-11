@@ -2,7 +2,9 @@ package io.github.siloonk.prisonServer.enchantments.effects;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
+import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
@@ -20,8 +22,8 @@ public class EclipseEnchantment extends Enchantment {
 
     private int radius;
 
-    public EclipseEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, int radius) {
-        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);
+    public EclipseEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency, int radius) {
+        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);
         this.radius = radius;
     }
 
@@ -68,7 +70,7 @@ public class EclipseEnchantment extends Enchantment {
 
                 bukkitPlayer.sendMultiBlockChange(blockChanges);
                 player.addBlocks(blockChanges.size());
-                player.setTokens(player.getTokens() + blockChanges.size());
+                player.setTokens(player.getTokens() + Math.round(blockChanges.size() * player.getMultiplier(BoosterType.TOKENS)));
                 blockChanges.clear();
                 timesRan++;
             }

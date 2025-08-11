@@ -1,6 +1,7 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
@@ -23,8 +24,8 @@ public class CosmicRiftEnchantment extends Enchantment {
     private int radius;
     private ArrayList<BlockDisplay> displays = new ArrayList<>();
 
-    public CosmicRiftEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, int radius) {
-        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);
+    public CosmicRiftEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency, int radius) {
+        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);
         this.radius = radius;
     }
 

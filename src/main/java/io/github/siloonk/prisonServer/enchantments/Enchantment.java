@@ -1,5 +1,6 @@
 package io.github.siloonk.prisonServer.enchantments;
 
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -12,12 +13,13 @@ public abstract class Enchantment {
     private int maxLevel;
     private int baseCost;
     private double costIncrease;
+    private Currency currency;
 
     private double chanceAtMaxLevel;
     private double baseChance;
 
 
-    public Enchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance) {
+    public Enchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency) {
         this.name = name;
         this.description = description;
         this.maxLevel = maxLevel;
@@ -25,6 +27,7 @@ public abstract class Enchantment {
         this.costIncrease = costIncrease;
         this.chanceAtMaxLevel = chanceAtMaxLevel;
         this.baseChance = baseChance;
+        this.currency = currency;
     }
 
 
@@ -57,6 +60,8 @@ public abstract class Enchantment {
     public double getBaseChance() {
         return baseChance;
     }
+
+    public Currency getCurrency() {return currency;}
 
     @Override
     public String toString() {

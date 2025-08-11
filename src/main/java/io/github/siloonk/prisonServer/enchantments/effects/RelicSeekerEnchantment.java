@@ -1,6 +1,7 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.CustomItems;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
@@ -11,8 +12,8 @@ import org.bukkit.entity.Player;
 
 public class RelicSeekerEnchantment extends Enchantment {
 
-    public RelicSeekerEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance) {
-        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);
+    public RelicSeekerEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency) {
+        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package io.github.siloonk.prisonServer.data.mines;
 
 import io.github.siloonk.prisonServer.PrisonServer;
-import io.papermc.paper.math.BlockPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -122,7 +121,7 @@ public class Mine {
 
     public void displayMineToPlayer(Player player) {
         new BukkitRunnable() {
-            private HashMap<Location, BlockData> blockUpdates=  new HashMap<>();
+            private HashMap<Location, BlockData> blockUpdates = new HashMap<>();
             private final BlockData blockData = blockType.createBlockData();
 
             @Override

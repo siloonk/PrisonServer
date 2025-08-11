@@ -16,17 +16,12 @@ public class ItemCommand extends Command {
 
     MiniMessage mm = MiniMessage.miniMessage();
 
-    protected ItemCommand(@NotNull String name) {
-        super(name);
+    public ItemCommand() {
+        super("cit");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("You must be a player to execute this command!");
-            return true;
-        }
-
         if (!sender.hasPermission("prisons.items")) {
             sender.sendMessage(mm.deserialize("<red>You don't have the right permissions to execute this command!"));
             return true;
@@ -38,9 +33,12 @@ public class ItemCommand extends Command {
         }
 
         switch (args[0].toLowerCase()) {
-            case "create" -> {
-
+            case "reload" -> {
+                PrisonServer.getInstance().getCustomItems().loadItems();
+                Player player = (Player) sender;
+                player.sendMessage(mm.deserialize("<green>The items have been reloaded!"));
             }
+
 
             case "give" -> {
                 if (args.length < 3) {
@@ -91,19 +89,19 @@ public class ItemCommand extends Command {
             return new ArrayList<>();
         }
 
-        if (args.length == 0) {
-            return List.of("give", "create");
-        }
-
-        if (args.length == 1 && args[0].equalsIgnoreCase("give")) {
-            return PrisonServer.getInstance().getCustomItems().getAllItemNames();
+        if (args.length == 1) {
+            return List.of("give", "reload");
         }
 
         if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
-            return Bukkit.getServer().getOnlinePlayers().stream().map(Player::getName).toList();
+            return PrisonServer.getInstance().getCustomItems().getAllItemNames();
         }
 
         if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            return Bukkit.getServer().getOnlinePlayers().stream().map(Player::getName).toList();
+        }
+
+        if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
             return List.of("amount (optional)");
         }
 

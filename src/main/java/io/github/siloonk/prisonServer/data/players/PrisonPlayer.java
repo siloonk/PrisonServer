@@ -1,14 +1,18 @@
 package io.github.siloonk.prisonServer.data.players;
 
 import io.github.siloonk.prisonServer.data.Booster;
+import io.github.siloonk.prisonServer.data.BoosterType;
+
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PrisonPlayer {
 
     private UUID uuid;
     private long money;
+    private long bubbles;
     private long tokens;
 
     private int blocksMined;
@@ -29,9 +33,10 @@ public class PrisonPlayer {
 
     }
 
-    public PrisonPlayer(UUID uuid, long money, long tokens, int blocksMined, Timestamp timeJoined, int level, int prestige) {
+    public PrisonPlayer(UUID uuid, long money, long bubbles, long tokens, int blocksMined, Timestamp timeJoined, int level, int prestige) {
         this.uuid = uuid;
         this.money = money;
+        this.bubbles = bubbles;
         this.tokens = tokens;
         this.blocksMined = blocksMined;
         this.timeJoined = timeJoined;
@@ -66,6 +71,10 @@ public class PrisonPlayer {
     public void setTokens(long tokens) {
         this.tokens = tokens;
     }
+
+    public long getBubbles() {return bubbles;}
+
+    public void setBubbles(long bubbles) {this.bubbles = bubbles;}
 
     public void setBlocksMined(int blocksMined) {
         this.blocksMined = blocksMined;
@@ -109,6 +118,11 @@ public class PrisonPlayer {
 
     public ArrayList<Booster> getBoosters() {
         return boosters;
+    }
+
+    public double getMultiplier(BoosterType boosterType) {
+        Optional<Booster> stream = getBoosters().stream().filter(b -> b.getType() == boosterType).findFirst();
+        return stream.map(Booster::getMultiplier).orElse(1d);
     }
 
     public void addBooster(Booster booster) {

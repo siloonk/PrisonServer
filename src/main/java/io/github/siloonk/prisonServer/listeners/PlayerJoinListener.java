@@ -38,7 +38,7 @@ public class PlayerJoinListener implements Listener {
         System.out.println(db.getPlayerDAO().getPlayerById(e.getPlayer().getUniqueId().toString()));
 
         if (db.getPlayerDAO().getPlayerById(e.getPlayer().getUniqueId().toString()) == null) {
-            PrisonPlayer prisonPlayer = new PrisonPlayer(e.getPlayer().getUniqueId(), 0, 0, 0, new Timestamp(new Date().getTime()), 1, 0);
+            PrisonPlayer prisonPlayer = new PrisonPlayer(e.getPlayer().getUniqueId(), 0, 0, 0, 0, new Timestamp(new Date().getTime()), 1, 0);
             db.getPlayerDAO().insertPlayer(prisonPlayer);
             e.getPlayer().sendMessage("Welcome to the server!");
             givePickaxe(e.getPlayer());

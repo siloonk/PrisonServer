@@ -1,7 +1,8 @@
 Common:
   display_name: <green>Common Crate
+  crate_item: COMMON_KEY
   menu:
-    rows: 3 # all values from 1-6
+    rows: 3
     background: BACKGROUND_ITEM
     '11': RELIC
 

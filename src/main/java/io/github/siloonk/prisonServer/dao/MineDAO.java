@@ -1,6 +1,5 @@
 package io.github.siloonk.prisonServer.dao;
 
-import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
@@ -19,7 +18,7 @@ public interface MineDAO {
     @SqlUpdate("INSERT INTO mines (owner, width, height, world_name, x, y, z, block_type, luckyblock_chance) VALUES(:owner, :width, :height, :worldName, :centerLocation.x, :centerLocation.y, :centerLocation.z, :blockType, :luckyBlockChance)")
     void insertMine(@BindBean Mine mine);
 
-    @SqlUpdate("UPDATE mines set owner=:owner, width=:width, height=:height, world_name=:worldName, x=:centerLocation.x, y=:centerLocation.y, z=:centerLocation.z, block_type=:blockType, luckyblock_chance=:luckyBlockChance")
+    @SqlUpdate("UPDATE mines set owner=:owner, width=:width, height=:height, world_name=:worldName, x=:centerLocation.x, y=:centerLocation.y, z=:centerLocation.z, block_type=:blockType, luckyblock_chance=:luckyBlockChance WHERE owner=:owner")
     void updateMine(@BindBean Mine mine);
 
     @SqlQuery("SELECT * FROM mines WHERE owner = :uuid")

@@ -13,3 +13,11 @@ BACKGROUND_ITEM:
   lore:
     - ""
   shiny: false
+
+
+COMMON_KEY:
+  name: "<gray>Common Key"
+  material: TRIPWIRE_HOOK
+  lore:
+    - ""
+  shiny: true

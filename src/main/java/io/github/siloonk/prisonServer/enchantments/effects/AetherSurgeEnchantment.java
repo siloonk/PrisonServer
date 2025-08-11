@@ -2,7 +2,8 @@ package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Booster;
-import io.github.siloonk.prisonServer.data.players.BoosterType;
+import io.github.siloonk.prisonServer.data.BoosterType;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
@@ -13,14 +14,13 @@ import org.bukkit.WeatherType;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Timer;
 
 public class AetherSurgeEnchantment extends Enchantment {
 
     private double boostAmount;
 
-    public AetherSurgeEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, double boostAmount) {
-        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);
+    public AetherSurgeEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency, double boostAmount) {
+        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);
         this.boostAmount = boostAmount;
     }
 

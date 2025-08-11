@@ -1,4 +1,4 @@
-package io.github.siloonk.prisonServer.data.players;
+package io.github.siloonk.prisonServer.data;
 
 public enum BoosterType {
     MONEY,

@@ -2,6 +2,7 @@ package io.github.siloonk.prisonServer.enchantments;
 
 import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.enchantments.effects.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -62,8 +63,6 @@ public class EnchantmentHandler implements Listener {
             Random random = new Random();
             double roll = random.nextDouble(); // Generates a value between 0.0 and 1.0
 
-            System.out.println(chance);
-            System.out.println(roll);
             if (roll < chance) {
                 enchantment.execute(event.getBlock().getLocation(), PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId()), level);
             }
@@ -100,60 +99,64 @@ public class EnchantmentHandler implements Listener {
             double costIncrease = enchantConfig.getInt("cost_increase");
             double chanceAtMaxLevel = enchantConfig.getInt("chance_at_max_level");
             double baseChance = enchantConfig.getInt("base_chance");
+            Currency currency = Currency.valueOf(enchantConfig.getString("currency").toUpperCase());
 
             switch (type) {
                 case EnchantmentType.EXPLOSIVE ->  {
                     int radius = enchantConfig.getInt("radius");
-                    registerEnchantment(type, new ExplosiveEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
+                    registerEnchantment(type, new ExplosiveEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, radius));
                 }
                 case EnchantmentType.JACKHAMMER -> {
-                    registerEnchantment(type, new JackhammerEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                    registerEnchantment(type, new JackhammerEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
                 }
                 case EnchantmentType.LUCKY -> {
                     int minAmount = enchantConfig.getInt("min_amount");
                     int maxAmount = enchantConfig.getInt("max_amount");
                     double scaleAmount = enchantConfig.getDouble("scale_amount");
-                    registerEnchantment(type, new LuckyEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, minAmount, maxAmount, scaleAmount));
+                    registerEnchantment(type, new LuckyEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, minAmount, maxAmount, scaleAmount));
                 }
                 case EnchantmentType.FORTUNE -> {
-                    registerEnchantment(type, new FortuneEnchantment(name, description, maxLevel, baseCost, costIncrease, 100));
+                    registerEnchantment(type, new FortuneEnchantment(name, description, maxLevel, baseCost, costIncrease, 100, currency));
                 }
                 case EnchantmentType.LIGHTNING -> {
                     int radius = enchantConfig.getInt("radius");
-                    registerEnchantment(type, new LightningEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
+                    registerEnchantment(type, new LightningEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, radius));
                 }
                 case EnchantmentType.ECLIPSE ->  {
                     int radius = enchantConfig.getInt("radius");
-                    registerEnchantment(type, new EclipseEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
+                    registerEnchantment(type, new EclipseEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, radius));
                 }
                 case EnchantmentType.STAR_CORE -> {
                     ArrayList<String> rewards = (ArrayList<String>) enchantConfig.getStringList("rewards");
-                    registerEnchantment(type, new StarCoreEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, rewards));
+                    registerEnchantment(type, new StarCoreEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, rewards, currency));
                 }
                 case EnchantmentType.COSMIC_RIFT -> {
                     int radius = enchantConfig.getInt("radius");
-                    registerEnchantment(type, new CosmicRiftEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, radius));
+                    registerEnchantment(type, new CosmicRiftEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, radius));
                 }
                 case EnchantmentType.STAR_FALL -> {
-                    registerEnchantment(type, new StarFallEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                    registerEnchantment(type, new StarFallEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
                 }
                 case EnchantmentType.RELIC_SEEKER -> {
-                    registerEnchantment(type, new RelicSeekerEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                    registerEnchantment(type, new RelicSeekerEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
                 }
                 case EnchantmentType.COSMIC_BLESSING -> {
                     double minBooster = enchantConfig.getDouble("min_multiplier");
                     double maxBooster = enchantConfig.getDouble("max_multiplier");
-                    registerEnchantment(type, new CosmicBlessingEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, minBooster, maxBooster));
+                    registerEnchantment(type, new CosmicBlessingEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, minBooster, maxBooster));
                 }
                 case EnchantmentType.OMNI_TREASURE -> {
-                    registerEnchantment(type, new OmniTreasureEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                    registerEnchantment(type, new OmniTreasureEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
                 }
                 case EnchantmentType.AETHER_SURGE -> {
                     double boostAmount = enchantConfig.getDouble("boost_amount");
-                    registerEnchantment(type, new AetherSurgeEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, boostAmount));
+                    registerEnchantment(type, new AetherSurgeEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, boostAmount));
                 }
                 case EnchantmentType.ECHO_OF_THE_DEEP -> {
-                    registerEnchantment(type, new EchoOfTheDeepEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance));
+                    registerEnchantment(type, new EchoOfTheDeepEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
+                }
+                case EnchantmentType.QUANTUM_MINER -> {
+                    registerEnchantment(type, new QuantumMinerEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
                 }
             }
         }
@@ -175,6 +178,7 @@ public class EnchantmentHandler implements Listener {
         if (enchantment instanceof AetherSurgeEnchantment) return PDCKeys.AETHER_SURGE_KEY;
         if (enchantment instanceof OmniTreasureEnchantment) return PDCKeys.OMNI_TREASURE;
         if (enchantment instanceof EchoOfTheDeepEnchantment) return PDCKeys.ECHO_OF_THE_DEEP;
+        if (enchantment instanceof QuantumMinerEnchantment) return PDCKeys.QUANTUM_MINER_KEY;
         return null;
     }
 

@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class CratesManager {
@@ -40,8 +41,9 @@ public class CratesManager {
             }
 
             for (String slot : section.getConfigurationSection("menu").getKeys(false)) {
-                if (slot.equals("background") || slot.equals("row")) continue;
+                if (slot.equals("background") || slot.equals("rows")) continue;
                 int slotNumber = Integer.parseInt(slot);
+                PrisonServer.getInstance().getCustomItems().getItem(section.getString("menu." + slot));
                 inventory.setItem(slotNumber, PrisonServer.getInstance().getCustomItems().getItem(section.getString("menu." + slot)));
             }
 
@@ -57,11 +59,17 @@ public class CratesManager {
                 rewards.add(weight, command);
             }
 
-            Crate crate = new Crate(displayName, inventory, rewards);
+            ItemStack crateItem = PrisonServer.getInstance().getCustomItems().getItem(section.getString("crate_item"));
+
+            Crate crate = new Crate(displayName, inventory, rewards, crateItem);
             crates.put(key, crate);
         }
     }
 
+
+    public Collection<String> getCrates() {
+        return crates.keySet();
+    }
 
     public Crate getCrate(String name) {
         return crates.get(name);
@@ -73,7 +81,7 @@ public class CratesManager {
         File file = new File(PrisonServer.getInstance().getDataFolder(), "/config/crates.yml");
         if (!file.exists()) {
             file.getParentFile().mkdirs();
-            PrisonServer.getInstance().saveResource("/config/crates.yml", false);
+            PrisonServer.getInstance().saveResource("config/crates.yml", false);
         }
 
         return YamlConfiguration.loadConfiguration(file);

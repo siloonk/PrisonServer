@@ -1,9 +1,5 @@
 package io.github.siloonk.prisonServer.data;
 
-import io.github.siloonk.prisonServer.data.players.BoosterType;
-
-import java.util.Date;
-
 public class Booster {
 
     private BoosterType type;

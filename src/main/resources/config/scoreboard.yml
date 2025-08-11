@@ -1,0 +1,15 @@
+title: <dark_purple><bold>PRISONS<reset> <white>| S1
+lines:
+  - "<reset>test"
+  - "<dark_purple><bold>Player Stats"
+  - " <light_purple>- Money <white>%money%"
+  - " <light_purple>- Tokens <white>%tokens%"
+  - " <light_purple>- Bubbles <white>%bubbles%"
+  - "<reset><reset>test"
+  - " <light_purple>- Rank <white>%mine_rank%"
+  - " <light_purple>- Prestige <white>%prestige%"
+  - " <light_purple>- Blocks mined <white>%blocks_mined%"
+  - "<reset><reset><reset>test"
+  - "<dark_purple><bold>Server Stats"
+  - " <light_purple>- TPS <white>%tps%"
+  - " <light_purple>- players <white>%online_players%"

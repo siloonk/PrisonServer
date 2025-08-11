@@ -1,7 +1,9 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
+import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
@@ -18,8 +20,8 @@ public class ExplosiveEnchantment extends Enchantment {
     private int radius;
 
 
-    public ExplosiveEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, int radius) {
-        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance);
+    public ExplosiveEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency, int radius) {
+        super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);
         this.radius = radius;
     }
 
@@ -45,7 +47,7 @@ public class ExplosiveEnchantment extends Enchantment {
                 }
                 Bukkit.getPlayer(player.getUuid()).sendMultiBlockChange(blockChanges, true);
                 player.addBlocks(blockChanges.size());
-                player.setTokens(player.getTokens() + blockChanges.size());
+                player.setTokens(player.getTokens() + Math.round((blockChanges.size() * player.getMultiplier(BoosterType.TOKENS))));
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
         blockLocation.getWorld().createExplosion(blockLocation, 0f);
