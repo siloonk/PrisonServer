@@ -43,6 +43,17 @@ public class EnchantmentHandler implements Listener {
         return enchantments.get(type);
     }
 
+    public static int getEnchantmentLevel(EnchantmentType type, ItemStack item) {
+        if (!item.hasItemMeta()) return 0;
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        if (!container.has(PDCKeys.ENCHANTMENTS_KEY)) return 0;
+
+        PersistentDataContainer enchants = container.get(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER);
+        NamespacedKey key = getKeyForEnchantment(getEnchantment(type));
+        if (!(enchants.has(key))) return 0;
+        return enchants.get(key, PersistentDataType.INTEGER);
+    }
+
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
@@ -212,6 +223,10 @@ public class EnchantmentHandler implements Listener {
         return builder.toString();
     }
 
+    public static void applyEnchantment(Player player, ItemStack item, EnchantmentType type, int level) {
+        applyEnchantment(player, item, getEnchantment(type), level);
+    }
+
     public static void applyEnchantment(Player player, ItemStack item, Enchantment enchantment, int level) {
         ItemMeta meta = item.getItemMeta();
         List<Component> lore = meta.lore() != null ? meta.lore() : createPickaxeLore(player);
@@ -227,6 +242,15 @@ public class EnchantmentHandler implements Listener {
 
         if (enchantsContainer.has(key, PersistentDataType.INTEGER)) {
             enchantsContainer.set(key, PersistentDataType.INTEGER, level);
+            for (Component line : lore) {
+                if (miniMessage.serialize(line).contains(miniMessage.serialize(enchantment.getName()))) {
+                    if (level == 0) {
+                        lore.remove(line);
+                        enchantsContainer.remove(key);
+                    }
+                    else lore.set(lore.indexOf(line), miniMessage.deserialize("<yellow>| ").append(enchantment.getName().append(miniMessage.deserialize(" %d".formatted(level)))).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+                }
+            }
         } else {
             enchantsContainer.set(key, PersistentDataType.INTEGER, level);
             lore.add(miniMessage.deserialize("<yellow>| ").append(enchantment.getName().append(miniMessage.deserialize(" %d".formatted(level)))).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));

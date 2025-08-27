@@ -39,8 +39,8 @@ public class EclipseEnchantment extends Enchantment {
                 .count(1)
                 .particle();
 
-        ArrayList<Location> locs = getLocations(blockLocation);
         Mine mine = PrisonServer.getInstance().getMineManager().getMine(bukkitPlayer.getUniqueId());
+        ArrayList<Location> locs = getLocations(blockLocation, mine, false);
         HashMap<Location, BlockData> blockChanges = new HashMap<>();
         BlockData data = Material.AIR.createBlockData();
 
@@ -50,7 +50,7 @@ public class EclipseEnchantment extends Enchantment {
             @Override
             public void run() {
                 if (timesRan >= 10) {
-                    removeAllBlocks(blockLocation, bukkitPlayer, player);
+                    removeAllBlocks(blockLocation, bukkitPlayer, player, mine);
                     bukkitPlayer.setPlayerTime(6000, false);
                     cancel();
                 }
@@ -77,7 +77,7 @@ public class EclipseEnchantment extends Enchantment {
         }.runTaskTimer(PrisonServer.getInstance(), 0L, 20L);
     }
 
-    private void removeAllBlocks(Location blockLocation, Player player, PrisonPlayer prisonPlayer) {
+    private void removeAllBlocks(Location blockLocation, Player player, PrisonPlayer prisonPlayer, Mine mine) {
         BlockData data = Material.AIR.createBlockData();
         new BukkitRunnable() {
 
@@ -85,7 +85,7 @@ public class EclipseEnchantment extends Enchantment {
             public void run() {
                 HashMap<Location, BlockData> blockChanges = new HashMap<>();
 
-                for (Location location : getLocations(blockLocation)) {
+                for (Location location : getLocations(blockLocation, mine, true)) {
                     blockChanges.put(location, data);
                 }
 
@@ -96,14 +96,15 @@ public class EclipseEnchantment extends Enchantment {
         }.runTaskAsynchronously(PrisonServer.getInstance());
     }
 
-    private @NotNull ArrayList<Location> getLocations(Location blockLocation) {
+    private @NotNull ArrayList<Location> getLocations(Location blockLocation, Mine mine, boolean checkMineBorder) {
         ArrayList<Location> locs = new ArrayList<>();
         for (int x = blockLocation.getBlockX() - radius; x <= blockLocation.getBlockX() + radius; x++) {
             for (int y = blockLocation.getBlockY() - radius; y <= blockLocation.getBlockY() + radius; y++) {
                 for (int z = blockLocation.getBlockZ() - radius; z <= blockLocation.getBlockZ() + radius; z++) {
                     Location loc = new Location(blockLocation.getWorld(), x, y, z);
                     if (loc.distance(blockLocation) <= radius)
-                        locs.add(loc);
+                        if (!checkMineBorder) locs.add(loc);
+                        else if (mine.isWithin(loc)) locs.add(loc);
                 }
             }
         }

@@ -20,13 +20,19 @@ public class Database {
     private final CrateDAO crateDAO;
 
     public Database() {
+        if (!PrisonServer.getInstance().getDataFolder().exists()) {
+            PrisonServer.getInstance().getDataFolder().mkdirs();
+        }
         jdbi = Jdbi.create("jdbc:sqlite:" + PrisonServer.getInstance().getDataFolder() + "/database.db");
         jdbi.installPlugin(new SqlObjectPlugin());
         jdbi.registerColumnMapper(UUID.class, new UUIDColumnMapper());
+
         playerDAO = jdbi.onDemand(PlayerDAO.class);
         mineDAO = jdbi.onDemand(MineDAO.class);
         warpDAO = jdbi.onDemand(WarpDAO.class);
         crateDAO = jdbi.onDemand(CrateDAO.class);
+
+
         playerDAO.createTable();
         mineDAO.createTable();
         warpDAO.createTable();

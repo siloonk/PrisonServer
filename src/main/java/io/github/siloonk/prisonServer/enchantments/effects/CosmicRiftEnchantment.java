@@ -1,5 +1,9 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.EnumWrappers;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
@@ -9,12 +13,15 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Random;
 
 public class CosmicRiftEnchantment extends Enchantment {
@@ -55,8 +62,6 @@ public class CosmicRiftEnchantment extends Enchantment {
 
         BukkitRunnable runnable = new BukkitRunnable() {
             int runCount = 0;
-            Random random = new Random();
-
 
 
             @Override
@@ -70,20 +75,21 @@ public class CosmicRiftEnchantment extends Enchantment {
                             Location newLoc = new Location(blackHoleLocation.getWorld(), x, y, z);
                             if (!mine.isWithin(newLoc)) continue;
                             if (newLoc.distance(blackHoleLocation) > runCount) continue;
-
+                            if (newLoc.getBlock().getType() != Material.AIR) continue;
 
                             BlockData blockType = mine.getBlockType().createBlockData();
                             bukkitPlayer.sendBlockChange(newLoc, Material.AIR.createBlockData());
                             player.addBlocks(1);
                             player.setTokens(player.getTokens() + 1);
 
-                            if (Math.random() > 0.05) continue;
+                            if (Math.random() > 0.005) continue;
                             BlockDisplay display = blockLocation.getWorld().spawn(newLoc, BlockDisplay.class, entity -> {
                                 entity.setBlock(blockType);
                                 entity.setTeleportDuration(59);
+                                entity.setVisibleByDefault(false);
+                                bukkitPlayer.showEntity(PrisonServer.getInstance(), entity);
                             });
                             display.teleport(blackHoleLocation);
-                            bukkitPlayer.showEntity(PrisonServer.getInstance(), display);
                             killDisplay(display, 3);
                         }
                     }
@@ -97,13 +103,13 @@ public class CosmicRiftEnchantment extends Enchantment {
 
     }
 
-    private void killDisplay(Entity entity, int seconds) {
+    private void killDisplay(Entity entity, int second) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 entity.remove();
             }
-        }.runTaskLater(PrisonServer.getInstance(), seconds * 20L);
+        }.runTaskLater(PrisonServer.getInstance(), second * 20L);
     }
 
 

@@ -4,7 +4,7 @@
 
 EXPLOSIVE:
   name: <gray>Explosive
-  description: <white>Chance to create a big explosion causing all blocks in it's path to shatter
+  description: <reset><gray>Chance to create a big explosion causing all blocks in it's path to shatter
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -15,7 +15,7 @@ EXPLOSIVE:
 
 JACKHAMMER:
   name: <gray>Jackhammer
-  description: <white>Chance to destroy a whole layer of your mine!
+  description: <reset><gray>Chance to destroy a whole layer of your mine!
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
@@ -25,7 +25,7 @@ JACKHAMMER:
 
 LUCKY:
   name: <gray>Lucky
-  description: <white>Chance to gain a random amount of tokens!
+  description: <reset><gray>Chance to gain a random amount of tokens!
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
@@ -38,7 +38,7 @@ LUCKY:
 
 FORTUNE:
   name: <gray>Fortune
-  description: <white>Get more blocks while mining!
+  description: <reset><gray>Get more blocks while mining!
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -47,7 +47,7 @@ FORTUNE:
 
 LIGHTNING:
   name: <gray>Lightning
-  description: <white>Chance for lightning to be summoned and create a massive explosion!
+  description: <reset><gray>Chance for lightning to be summoned and create a massive explosion!
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
@@ -58,7 +58,7 @@ LIGHTNING:
 
 ECLIPSE:
   name: <gray>Eclipse
-  description: <white>Chance to create a shadow zone around the mined block, breaking everything within the zone radius.
+  description: <reset><gray>Chance to create a shadow zone around the mined block, breaking everything within the zone radius.
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
@@ -69,7 +69,7 @@ ECLIPSE:
 
 QUANTUM_MINER:
   name: <gray>Quantum Miner
-  description: <white>Each mined block has a chance to clone itself into 2-5 additional blocks in your inventory/backpack
+  description: <reset><gray>Each mined block has a chance to clone itself into 2-5 additional blocks in your inventory/backpack
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -81,7 +81,7 @@ QUANTUM_MINER:
 
 AETHER_SURGE:
   name: <gray>Aether Surge
-  description: <white>Occasionally creates an aether storm while mining, boosting rewards for a short time.
+  description: <reset><gray>Occasionally creates an aether storm while mining, boosting rewards for a short time.
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -92,7 +92,7 @@ AETHER_SURGE:
 
 STAR_CORE:
   name: <gray>Star Core
-  description: <white>Has a small chance to spawn a Star Core, a rare consumable block that can be broken for ultra-valuable rewards!
+  description: <reset><gray>Has a small chance to spawn a Star Core, a rare consumable block that can be broken for ultra-valuable rewards!
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -104,7 +104,7 @@ STAR_CORE:
 
 COSMIC_RIFT:
   name: <gray>Cosmic Rift
-  description: <white>Creates a temporary portal that sucks up blocks in a large sphere!
+  description: <reset><gray>Creates a temporary portal that sucks up blocks in a large sphere!
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -115,7 +115,7 @@ COSMIC_RIFT:
 
 STAR_FALL:
   name: <gray>Starfall
-  description: <white>Summons shooting stars that break blocks in random patterns!
+  description: <reset><gray>Summons shooting stars that break blocks in random patterns!
   max_level: 10000
   base_cost: 10000
   cost_increases: 100
@@ -125,7 +125,7 @@ STAR_FALL:
 
 RELIC_SEEKER:
   name: <gray>Relic Seeker
-  description: <white>Has a small chance to drop an ancient relic, which can be traded for high rewards!
+  description: <reset><gray>Has a small chance to drop an ancient relic, which can be traded for high rewards!
   max_level: 10000
   base_cost: 10000
   cost_increases: 100
@@ -135,7 +135,19 @@ RELIC_SEEKER:
 
 COSMIC_BLESSING:
   name: <gray>Cosmic Blessing
-  description: <white>Occasionally grants random buffs or boosts
+  description: <reset><gray>Occasionally grants random buffs or boosts
+  max_level: 10000
+  base_cost: 10000
+  cost_increase: 100
+  chance_at_max_level: 100
+  base_chance: 100
+  min_multiplier: 2
+  max_multiplier: 5
+  currency: tokens
+
+OMNI_TREASURE:
+  name: <gray>Omni Treasure
+  description: <reset><gray>Mined blocks have a very rare chance to drop an Omni crate, containing items, tokens, money and EXP
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
@@ -143,9 +155,10 @@ COSMIC_BLESSING:
   base_chance: 100
   currency: tokens
 
-OMNI_TREASURE:
-  name: <gray>Omni Treasure
-  description: <white>Mined blocks have a very rare chance to drop an Omni crate, containing items, tokens, money and EXP
+
+ECHO_OF_THE_DEEP:
+  name: <gray>Echo Of The Deep
+  description: <reset><gray>Has a small chance to buff your lucky blocks for 30 seconds!
   max_level: 10000
   base_cost: 10000
   cost_increase: 100

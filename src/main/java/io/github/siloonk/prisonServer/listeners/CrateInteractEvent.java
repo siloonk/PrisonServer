@@ -11,6 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Optional;
+
 public class CrateInteractEvent implements Listener {
 
     private static final MiniMessage mm = MiniMessage.miniMessage();
@@ -46,11 +48,16 @@ public class CrateInteractEvent implements Listener {
         Player player = e.getPlayer();
         if (e.getClickedBlock() == null) return;
         // Check if clicked block is a crate
-        if (PrisonServer.getInstance().getCrateBlocksManager().getBlocks().stream().noneMatch(crateBlock -> crateBlock.getLocation().equals(e.getClickedBlock().getLocation()))) return;
+        if (PrisonServer.getInstance().getCrateBlocksManager().getBlocks().stream().noneMatch(crateBlock -> {
+            if (crateBlock.getLocation() == null) return false;
+            return crateBlock.getLocation().equals(e.getClickedBlock().getLocation());
+        })) return;
         e.setCancelled(true);
-        CrateBlock cb = PrisonServer.getInstance().getCrateBlocksManager().getBlocks().stream().filter(crateBlock -> crateBlock.getLocation().equals(e.getClickedBlock().getLocation())).findFirst().get();
-        if (cb.getLocation() == null) return;
-        Crate crate = PrisonServer.getInstance().getCratesManager().getCrate(cb.getId());
+        Optional<CrateBlock> cb = PrisonServer.getInstance().getCrateBlocksManager().getBlocks().stream().filter(crateBlock -> crateBlock.getLocation().equals(e.getClickedBlock().getLocation())).findFirst();
+        if (cb.isEmpty()) return;
+
+        if (cb.get().getLocation() == null) return;
+        Crate crate = PrisonServer.getInstance().getCratesManager().getCrate(cb.get().getId());
 
         player.openInventory(crate.getDisplayInventory());
     }

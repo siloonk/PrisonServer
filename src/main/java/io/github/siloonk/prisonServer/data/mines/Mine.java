@@ -133,7 +133,7 @@ public class Mine {
                         }
                     }
                 }
-
+                starCores.clear();
                 player.sendMultiBlockChange(blockUpdates, true);
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
