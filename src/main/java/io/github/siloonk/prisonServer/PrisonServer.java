@@ -97,6 +97,7 @@ public final class PrisonServer extends JavaPlugin {
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new CrateInteractEvent(), this);
         pm.registerEvents(new ScoreboardHandler(), this);
+        pm.registerEvents(new EnchantmentInventoryListener(), this);
 
 
         protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.HIGH, PacketType.Play.Client.USE_ITEM_ON, PacketType.Play.Client.USE_ITEM) {
