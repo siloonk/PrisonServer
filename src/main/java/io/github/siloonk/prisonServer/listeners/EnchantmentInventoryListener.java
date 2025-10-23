@@ -82,8 +82,9 @@ public class EnchantmentInventoryListener implements Listener {
         
         // Send success message
         String currencyName = currency.toString().charAt(0) + currency.toString().substring(1).toLowerCase();
+        String enchantmentName = mm.serialize(enchantment.getName()).replaceAll("<[^>]+>", "").replaceAll("</[^>]+>", "");
         player.sendMessage(mm.deserialize(String.format("<green>Successfully upgraded <white>%s<green> to level <white>%d<green>! Cost: <white>%d %s", 
-            mm.serialize(enchantment.getName()).replace("<gray>", "").replace("</gray>", ""), 
+            enchantmentName, 
             newLevel, 
             cost, 
             currencyName)));
