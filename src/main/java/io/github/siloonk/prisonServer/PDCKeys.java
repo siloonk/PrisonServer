@@ -2,6 +2,7 @@ package io.github.siloonk.prisonServer;
 
 import org.bukkit.NamespacedKey;
 
+
 public class PDCKeys {
 
     // Container tags
@@ -26,7 +27,13 @@ public class PDCKeys {
     public static final NamespacedKey ECHO_OF_THE_DEEP = new NamespacedKey("prisons", "echo_of_the_deep");
 
 
+    public static final NamespacedKey RELIC_BOOST = new NamespacedKey("prisons", "relic_boost");
+    public static final NamespacedKey RELIC_TYPE = new NamespacedKey("prisons", "relic_type");
+    public static final NamespacedKey RARITY = new NamespacedKey("prisons", "rarity");
+
     public static final NamespacedKey PICKAXE_EXP_KEY = new NamespacedKey("prisons", "pickaxe_exp");
     public static final NamespacedKey PICKAXE_EXP_REQUIRED_KEY = new NamespacedKey("prisons", "pickaxe_exp_required");
     public static final NamespacedKey PICKAXE_BLOCKS_MINED_KEY = new NamespacedKey("prisons", "pickaxe_blocks_mined");
+
+    public static final NamespacedKey ORIGIN_ITEM_NAME = new NamespacedKey("prisons", "original_item_name");
 }

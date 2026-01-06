@@ -1,0 +1,96 @@
+#
+# List of relics!
+#
+# Explosive
+# Jackhammer
+# Fortune
+# Lucky
+# Lightning
+# Eclipse
+# Quantum Miner
+# Aether Surge
+# Star Core
+# Cosmic Rift
+# Starfall
+# Relic Seeker
+# Cosmic Blessing
+# Omni Treasure
+# Echo Of The Deep
+# Money
+# Tokens
+# Bubbles
+# Pickaxe XP
+#
+
+
+common:
+  relics:
+    - money
+    - tokens
+    - bubbles
+    - explosive
+
+  # Boost percentage
+  range:
+    min: 10
+    max: 20
+
+
+uncommon:
+  relics:
+    - money
+    - tokens
+    - bubbles
+    - explosive
+    - jackhammer
+    - pickaxe_xp
+
+  range:
+    min: 15
+    max: 40
+
+rare:
+  relics:
+    - money
+    - tokens
+    - bubbles
+    - explosive
+    - jackhammer
+    - pickaxe_xp
+    - echo_of_the_deep
+
+  range:
+    min: 20
+    max: 50
+
+
+
+epic:
+  relics:
+    - money
+    - tokens
+    - bubbles
+    - explosive
+    - jackhammer
+    - pickaxe_xp
+    - echo_of_the_deep
+
+  range:
+    min: 20
+    max: 50
+
+
+
+legendary:
+  relics:
+    - money
+    - tokens
+    - bubbles
+    - explosive
+    - jackhammer
+    - pickaxe_xp
+    - echo_of_the_deep
+
+  range:
+    min: 20
+    max: 50

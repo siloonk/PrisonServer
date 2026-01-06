@@ -1,6 +1,8 @@
 package io.github.siloonk.prisonServer.items;
 
+import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Rarity;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -13,15 +15,18 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class CustomItems {
 
     private HashMap<String, ItemStack> items = new HashMap<>();
+    private static Random random = new Random();
 
 
     public CustomItems() {
@@ -57,6 +62,7 @@ public class CustomItems {
         }
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(PDCKeys.ORIGIN_ITEM_NAME, PersistentDataType.STRING, section.getString("name"));
         meta.displayName(miniMessage.deserialize(section.getString("name")).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
         if (!lore.isEmpty())
             meta.lore(lore);
@@ -71,6 +77,18 @@ public class CustomItems {
 
 
     public ItemStack getItem(String key) {
+        if (key.equals("RELIC")) {
+            ItemStack item = items.get(key);
+            ItemMeta meta = item.getItemMeta();
+            Rarity rarity = Rarity.values()[random.nextInt(Rarity.values().length)];
+
+            meta.getPersistentDataContainer().set(PDCKeys.RARITY, PersistentDataType.STRING, rarity.toString());
+            MiniMessage mm = MiniMessage.miniMessage();
+            meta.displayName(rarity.getName().append(mm.deserialize(item.getPersistentDataContainer().get(PDCKeys.ORIGIN_ITEM_NAME, PersistentDataType.STRING))));
+            item.setItemMeta(meta);
+            return item;
+        }
+
         return items.get(key);
     }
 

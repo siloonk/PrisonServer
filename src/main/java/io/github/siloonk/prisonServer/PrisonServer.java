@@ -7,17 +7,16 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import io.github.siloonk.prisonServer.commands.*;
-import io.github.siloonk.prisonServer.crates.Crate;
-import io.github.siloonk.prisonServer.crates.CrateBlock;
 import io.github.siloonk.prisonServer.crates.CrateBlocksManager;
 import io.github.siloonk.prisonServer.crates.CratesManager;
 import io.github.siloonk.prisonServer.data.mines.MineManager;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
+import io.github.siloonk.prisonServer.data.relics.Relic;
+import io.github.siloonk.prisonServer.data.relics.RelicManager;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentInventory;
 import io.github.siloonk.prisonServer.items.CustomItems;
 import io.github.siloonk.prisonServer.listeners.*;
-import org.bukkit.Material;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,6 +32,7 @@ public final class PrisonServer extends JavaPlugin {
     private CratesManager cratesManager;
     private CrateBlocksManager crateBlocksManager;
     private ProtocolManager protocolManager;
+    private RelicManager relicManager;
 
     @Override
     public void onEnable() {
@@ -45,6 +45,7 @@ public final class PrisonServer extends JavaPlugin {
         customItems = new CustomItems();
         cratesManager = new CratesManager();
         crateBlocksManager = new CrateBlocksManager();
+        relicManager = new RelicManager();
         registerEvents();
         registerCommands();
     }
@@ -90,6 +91,10 @@ public final class PrisonServer extends JavaPlugin {
         return cratesManager;
     }
 
+    public RelicManager getRelicManager() {
+        return relicManager;
+    }
+
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
@@ -97,6 +102,7 @@ public final class PrisonServer extends JavaPlugin {
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new CrateInteractEvent(), this);
         pm.registerEvents(new ScoreboardHandler(), this);
+        pm.registerEvents(new RelicInteractListener(), this);
 
 
         protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.HIGH, PacketType.Play.Client.USE_ITEM_ON, PacketType.Play.Client.USE_ITEM) {

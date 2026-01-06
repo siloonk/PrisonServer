@@ -1,15 +1,10 @@
 RELIC:
-  name: <purple>Relic
+  name: <purple> Relic
   material: NETHER_STAR
   lore:
     - "<red>test"
     - "<green>test"
   shiny: false
-
-  loot_table:
-    '1':
-      weight: 50
-      command: "say test"
 
 BACKGROUND_ITEM:
   name: ""
