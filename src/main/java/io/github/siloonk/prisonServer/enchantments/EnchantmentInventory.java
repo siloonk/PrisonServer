@@ -27,7 +27,7 @@ public class EnchantmentInventory {
     private static final Material ENCHANT_ITEM = Material.BOOK;
 
 
-    public static synchronized void open(Player player) {
+    public static void open(Player player) {
         for (int i = 0; i < ROWS * 9; i++) {
             MENU.setItem(i, BACKGROUND_ITEM);
         }
@@ -35,7 +35,17 @@ public class EnchantmentInventory {
         ItemStack item = player.getInventory().getItemInMainHand();
         if (!item.getType().toString().contains("_PICKAXE")) return;
 
+        ItemStack relicsItem = new ItemStack(Material.NETHER_STAR);
+        relicsItem.editMeta((meta) -> {
+            meta.displayName(mm.deserialize("<light_purple>Relics").decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+
+            meta.lore(List.of(
+                    mm.deserialize("<gray>Select your relics here!").decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+            ));
+        });
+
         MENU.setItem(19, item);
+        MENU.setItem(28, relicsItem);
 
         int slot = 0;
         int row = 0;
