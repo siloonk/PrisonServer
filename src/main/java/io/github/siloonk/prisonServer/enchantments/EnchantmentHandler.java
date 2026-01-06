@@ -60,13 +60,47 @@ public class EnchantmentHandler implements Listener {
         if (!item.getType().toString().contains("_PICKAXE")) return;
         if (!item.hasItemMeta()) return;
         ItemMeta meta = item.getItemMeta();
+
+        item.editMeta(itemMeta -> {
+            PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+            int pickaxeEXP = pdc.getOrDefault(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
+            int pickaxeEXPRequired = pdc.getOrDefault(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, 350);
+            int pickaxeLevel = pdc.getOrDefault(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, 0);
+            pdc.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, ++pickaxeEXP);
+            MiniMessage miniMessage = MiniMessage.miniMessage();
+
+
+            List<Component> lore = itemMeta.lore();
+
+            if (lore == null) {
+                lore = new ArrayList<>();
+            }
+
+            // Levelup
+            if (pickaxeEXP >= pickaxeEXPRequired) {
+                pdc.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
+                pickaxeEXPRequired = (int) Math.ceil(pickaxeEXPRequired * 1.25);
+                pdc.set(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, pickaxeEXPRequired);
+                pdc.set(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, ++pickaxeLevel);
+                event.getPlayer().sendMessage(miniMessage.deserialize("<green>Your pickaxe has leveled up!"));
+            }
+
+            // Update pickaxe lore
+            lore.set(4, miniMessage.deserialize("<aqua>|<reset><white> EXP: <gray>%d / %d".formatted(pickaxeEXP, pickaxeEXPRequired)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+            lore.set(5, (miniMessage.deserialize("<aqua>| " + getProgressBar(pickaxeEXP, pickaxeEXPRequired)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
+            lore.set(3, miniMessage.deserialize("<aqua>|<reset><white> Level: <gray>%d".formatted(pickaxeLevel)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+            itemMeta.lore(lore);
+        });
+
+
+
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         if (!pdc.has(PDCKeys.ENCHANTMENTS_KEY)) return;
-
         PersistentDataContainer enchantsContainer = pdc.get(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER);
         for (NamespacedKey key : enchantsContainer.getKeys()) {
             Enchantment enchantment = enchantments.get(EnchantmentType.valueOf(key.getKey().toUpperCase()));
-            int level = enchantsContainer.get(key, PersistentDataType.INTEGER);
+            int level = enchantsContainer.getOrDefault(key, PersistentDataType.INTEGER, 0);
             double chance = enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel());
 
 

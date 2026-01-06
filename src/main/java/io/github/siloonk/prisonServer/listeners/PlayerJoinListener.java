@@ -74,6 +74,7 @@ public class PlayerJoinListener implements Listener {
         meta.lore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
+        container.set(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, 0);
         container.set(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, 350);
         container.set(PDCKeys.PICKAXE_BLOCKS_MINED_KEY, PersistentDataType.INTEGER, 0);
         container.set(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER, container.getAdapterContext().newPersistentDataContainer());

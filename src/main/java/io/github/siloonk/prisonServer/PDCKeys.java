@@ -32,6 +32,7 @@ public class PDCKeys {
     public static final NamespacedKey RARITY = new NamespacedKey("prisons", "rarity");
 
     public static final NamespacedKey PICKAXE_EXP_KEY = new NamespacedKey("prisons", "pickaxe_exp");
+    public static final NamespacedKey PICKAXE_LEVEL = new NamespacedKey("prisons", "pickaxe_level");
     public static final NamespacedKey PICKAXE_EXP_REQUIRED_KEY = new NamespacedKey("prisons", "pickaxe_exp_required");
     public static final NamespacedKey PICKAXE_BLOCKS_MINED_KEY = new NamespacedKey("prisons", "pickaxe_blocks_mined");
 
