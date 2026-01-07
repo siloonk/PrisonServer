@@ -1,6 +1,10 @@
 package io.github.siloonk.prisonServer.enchantments;
 
+import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
+import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -8,20 +12,25 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantmentInventory {
+public class EnchantmentInventory implements Listener {
 
     private static final int ROWS = 6;
     private static final ItemStack BACKGROUND_ITEM = PrisonServer.getInstance().getCustomItems().getItem("BACKGROUND_ITEM");
 
     private static final MiniMessage mm = MiniMessage.miniMessage();
-    private static final Inventory MENU = Bukkit.createInventory(null, ROWS*9, mm.deserialize("<gray>Enchantments"));
+    private static final Component GUI_TITLE = mm.deserialize("<gray>Enchantments");
+    private static final Inventory MENU = Bukkit.createInventory(null, ROWS*9, GUI_TITLE);
 
 
     private static final Material ENCHANT_ITEM = Material.BOOK;
@@ -62,6 +71,69 @@ public class EnchantmentInventory {
 
 
         player.openInventory(MENU);
+    }
+
+    @EventHandler
+    public void onEnchantmentInventoryInteractEvent(InventoryClickEvent e) {
+        if (!e.getView().title().equals(GUI_TITLE)) return;
+        if (e.getCurrentItem() == null) return;
+        if (!e.getCurrentItem().hasItemMeta()) return;
+        e.setCancelled(true);
+        if (e.getCurrentItem().getType() != Material.BOOK) return;
+
+
+        // Get the pickaxe the player is holding
+        ItemStack tool = e.getWhoClicked().getInventory().getItemInMainHand();
+        if (!tool.getType().toString().contains("_PICKAXE")) return;
+
+        // Retrieve the enchantment name from the clicked item
+        ItemStack clickedItem = e.getCurrentItem();
+        String enchantName = mm.stripTags(mm.serialize(clickedItem.getItemMeta().displayName())).replaceAll(" ", "_").toUpperCase();
+
+        // Get the enchantment data
+        Enchantment enchantment = EnchantmentHandler.getEnchantment(EnchantmentType.valueOf(enchantName));
+
+        // Get enchantment level on the player's pickaxe
+        int level = EnchantmentHandler.getEnchantmentLevel(EnchantmentType.valueOf(enchantName), tool);
+        int nextLevel = level;
+        int levelsToBuy = 1;
+
+        // Determine how many levels we should buy
+        if (e.getClick().isRightClick()) levelsToBuy = 10;
+        if (e.getClick().isKeyboardClick()) levelsToBuy = 100;
+        if (e.getClick().isShiftClick()) levelsToBuy = 1000;
+
+        // Retrieve the prison player and the currency for the enchantment
+        PrisonPlayer player = PrisonServer.getInstance().getPlayerManager().getPlayer(e.getWhoClicked().getUniqueId());
+        Currency currency = enchantment.getCurrency();
+
+        // Buy new enchants
+        for (int i = 0; i < levelsToBuy; i++) {
+            int cost = (int) (enchantment.getBaseCost() + (enchantment.getCostIncrease() * level + 1));
+
+            // Check if the player has enough of the currency required
+            if (player.getCurrency(currency) < cost || nextLevel >= enchantment.getMaxLevel()) {
+                e.getWhoClicked().sendMessage("test");
+                break;
+            }
+
+            player.setCurrency(currency,  player.getCurrency(currency) - cost);
+            nextLevel++;
+        }
+
+        if (nextLevel == level && nextLevel >= enchantment.getMaxLevel()) {
+            e.getWhoClicked().sendMessage(mm.deserialize("<dark_purple><bold>Enchantments<reset> <gray>»This enchant is already max level!"));
+            return;
+        }
+
+        if (nextLevel == level) {
+            e.getWhoClicked().sendMessage(mm.deserialize("<dark_purple><bold>Enchantments<reset> <gray>»You don't have enough <light_purple>%s<gray> to buy this enchantment!".formatted(currency.toString())));
+            return;
+        }
+
+        EnchantmentHandler.applyEnchantment((Player) e.getWhoClicked(), tool, EnchantmentType.valueOf(enchantName), nextLevel);
+        e.getClickedInventory().setItem(e.getSlot(), enchantBook(EnchantmentType.valueOf(enchantName), tool));
+        e.getWhoClicked().sendMessage(mm.deserialize("<dark_purple><bold>Enchantments<reset> <gray>»You have bought <light_purple>%d level(s) <gray>of <dark_purple>".formatted(nextLevel - level)).append(enchantment.getName()));
     }
 
 

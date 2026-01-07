@@ -179,7 +179,7 @@ public class EnchantmentHandler implements Listener {
                     int radius = enchantConfig.getInt("radius");
                     registerEnchantment(type, new CosmicRiftEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency, radius));
                 }
-                case EnchantmentType.STAR_FALL -> {
+                case EnchantmentType.STARFALL -> {
                     registerEnchantment(type, new StarFallEnchantment(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency));
                 }
                 case EnchantmentType.RELIC_SEEKER -> {

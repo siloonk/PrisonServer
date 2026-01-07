@@ -2,6 +2,7 @@ package io.github.siloonk.prisonServer.data.players;
 
 import io.github.siloonk.prisonServer.data.Booster;
 import io.github.siloonk.prisonServer.data.BoosterType;
+import io.github.siloonk.prisonServer.data.Currency;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -155,5 +156,18 @@ public class PrisonPlayer {
         }
 
         this.freeBackpackSlots -= blocks;
+    }
+
+    public long getCurrency(Currency currency) {
+        if (currency == Currency.TOKENS) return tokens;
+        else if (currency == Currency.MONEY) return money;
+        else if (currency == Currency.BUBBLES) return bubbles;
+        return 0;
+    }
+
+    public void setCurrency(Currency currency, long amount) {
+        if (currency == Currency.TOKENS) tokens =  amount;
+        else if (currency == Currency.MONEY) money = amount;
+        else if (currency == Currency.BUBBLES) bubbles = amount;
     }
 }

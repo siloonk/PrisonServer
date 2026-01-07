@@ -11,7 +11,7 @@ public enum EnchantmentType {
     AETHER_SURGE,
     STAR_CORE,
     COSMIC_RIFT,
-    STAR_FALL,
+    STARFALL,
     RELIC_SEEKER,
     COSMIC_BLESSING,
     OMNI_TREASURE,

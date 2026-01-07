@@ -20,7 +20,7 @@ public class PDCKeys {
     public static final NamespacedKey AETHER_SURGE_KEY = new NamespacedKey("prison", "aether_surge");
     public static final NamespacedKey STAR_CORE_KEY = new NamespacedKey("prisons", "star_core");
     public static final NamespacedKey COSMIC_RIFT_KEY = new NamespacedKey("prisons", "cosmic_rift");
-    public static final NamespacedKey STAR_FALL_KEY = new NamespacedKey("prisons", "star_fall");
+    public static final NamespacedKey STAR_FALL_KEY = new NamespacedKey("prisons", "starfall");
     public static final NamespacedKey RELIC_SEEKER_KEY = new NamespacedKey("prisons", "relic_seeker");
     public static final NamespacedKey COSMIC_BLESSING_KEY = new NamespacedKey("prisons", "cosmic_blessing");
     public static final NamespacedKey OMNI_TREASURE = new NamespacedKey("prisons", "omni_treasure");

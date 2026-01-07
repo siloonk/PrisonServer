@@ -17,17 +17,19 @@ public class Util {
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
 
     public static String formatNumber(double n, int iteration) {
-        double d = ((double) (long) n / 100) / 10.0;
-        boolean isRound = (d * 10) %10 == 0;//true if the decimal part is equal to 0 (then it's trimmed anyway)
-        //this determines the class, i.e. 'k', 'm' etc
-        //this decides whether to trim the decimals
-        // (int) d * 10 / 10 drops the decimal
-        return d < 1000? //this determines the class, i.e. 'k', 'm' etc
-                (isRound || d > 9.99 ? //this decides whether to trim the decimals
-                        (int) d * 10 / 10 : d + "" // (int) d * 10 / 10 drops the decimal
-                ) + "" + c[iteration]
-                : formatNumber(d, iteration+1);
+        double d = n / 1000.0;
+
+        if (d < 1000) {
+            // round to 1 decimal
+            d = Math.round(d * 10.0) / 10.0;
+
+            // remove .0 if whole number
+            return (d % 1 == 0 ? (int) d : d) + "" + c[iteration];
+        }
+
+        return formatNumber(d, iteration + 1);
     }
+
 
     public static ArrayList<Component> convertStringListToComponentList(List<String> list) {
         ArrayList<Component> components = new ArrayList<>();

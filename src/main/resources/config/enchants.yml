@@ -8,8 +8,8 @@ EXPLOSIVE:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 5
+  base_chance: 0.2
   radius: 15
   currency: tokens
 
@@ -19,8 +19,8 @@ JACKHAMMER:
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 2
+  base_chance: 0.1
   currency: tokens
 
 LUCKY:
@@ -29,8 +29,8 @@ LUCKY:
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 5
+  base_chance: 0.5
   min_amount: 10000
   max_amount: 50000
   scale_amount: 1.01 # how much should it increase each level!
@@ -51,8 +51,8 @@ LIGHTNING:
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 0.05
+  base_chance: 0.05
   radius: 10
   currency: tokens
 
@@ -62,8 +62,8 @@ ECLIPSE:
   max_level: 10000
   base_cost: 10000
   cost_increase:  100
-  chance_at_max_level: 100
-  base_chance: 10
+  chance_at_max_level: 1
+  base_chance: 0.05
   radius: 10
   currency: tokens
 
@@ -73,8 +73,8 @@ QUANTUM_MINER:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 25
+  base_chance: 0.5
   min_blocks: 2 # These values are INCLUSIVE
   max_blocks: 5
   currency: tokens
@@ -85,8 +85,8 @@ AETHER_SURGE:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 1
+  base_chance: 0.1
   boost_amount: 5
   currency: tokens
 
@@ -96,8 +96,8 @@ STAR_CORE:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 1
+  base_chance: 0.01
   rewards:
     - give %player% diamond_pickaxe 1
   currency: tokens
@@ -108,19 +108,19 @@ COSMIC_RIFT:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 2
+  base_chance: 0.01
   radius: 20
   currency: tokens
 
-STAR_FALL:
+STARFALL:
   name: <gray>Starfall
   description: <reset><gray>Summons shooting stars that break blocks in random patterns!
   max_level: 10000
   base_cost: 10000
   cost_increases: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 5
+  base_chance: 0.02
   currency: tokens
 
 RELIC_SEEKER:
@@ -129,8 +129,8 @@ RELIC_SEEKER:
   max_level: 10000
   base_cost: 10000
   cost_increases: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 1
+  base_chance: 0.01
   currency: tokens
 
 COSMIC_BLESSING:
@@ -139,8 +139,8 @@ COSMIC_BLESSING:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 2
+  base_chance: 0.01
   min_multiplier: 2
   max_multiplier: 5
   currency: tokens
@@ -151,10 +151,9 @@ OMNI_TREASURE:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 2
+  base_chance: 0.02
   currency: tokens
-
 
 ECHO_OF_THE_DEEP:
   name: <gray>Echo Of The Deep
@@ -162,6 +161,6 @@ ECHO_OF_THE_DEEP:
   max_level: 10000
   base_cost: 10000
   cost_increase: 100
-  chance_at_max_level: 100
-  base_chance: 100
+  chance_at_max_level: 2
+  base_chance: 0.02
   currency: tokens
