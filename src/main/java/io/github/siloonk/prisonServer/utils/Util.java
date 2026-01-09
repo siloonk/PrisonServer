@@ -19,7 +19,7 @@ public class Util {
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
 
     public static String formatNumber(double n, int iteration) {
-        if ((n < 1000 && n > 0) || (n > -1000 && n < 0)) return n + "";
+        if ((n < 1000 && n >= 0) || (n > -1000 && n <= 0)) return n + "";
 
         double d = n / 1000.0;
 

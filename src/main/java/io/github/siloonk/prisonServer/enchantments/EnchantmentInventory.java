@@ -113,7 +113,6 @@ public class EnchantmentInventory implements Listener {
 
             // Check if the player has enough of the currency required
             if (player.getCurrency(currency) < cost || nextLevel >= enchantment.getMaxLevel()) {
-                e.getWhoClicked().sendMessage("test");
                 break;
             }
 

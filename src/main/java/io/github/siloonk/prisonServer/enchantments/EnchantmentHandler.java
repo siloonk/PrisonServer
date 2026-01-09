@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
+import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.effects.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -53,6 +54,10 @@ public class EnchantmentHandler implements Listener {
                 ItemMeta meta = item.getItemMeta();
 
                 event.getPlayer().sendBlockChange(pos.toLocation(event.getPlayer().getWorld()) , Material.AIR.createBlockData());
+                // Provide the player with some tokens
+                PrisonPlayer player =  PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+                player.setTokens((long) (player.getTokens() + Math.ceil(Math.random() * 10)));
+
 
                 item.editMeta(itemMeta -> {
                     PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();

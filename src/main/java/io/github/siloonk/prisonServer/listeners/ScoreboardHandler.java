@@ -55,7 +55,6 @@ public class ScoreboardHandler implements Listener {
             public void run() {
                 if (prisonPlayer == null) {
                     prisonPlayer = PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
-                    System.out.println("test");
                     return;
                 }
 
