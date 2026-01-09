@@ -6,6 +6,7 @@ import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
+import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,23 +26,48 @@ public class JackhammerEnchantment extends Enchantment {
     public void execute(Location blockLocation, PrisonPlayer player, int level) {
         Mine mine = PrisonServer.getInstance().getMineManager().getMine(player.getUuid());
 
-        new BukkitRunnable() {
-            HashMap<Location, BlockData> blockChanges = new HashMap<>();
-            final BlockData blockData = Material.AIR.createBlockData();
+        Location minLoc =  new Location(
+                mine.getCenterLocation().getWorld(),
+                mine.getCenterLocation().getBlockX() - mine.getWidth() / 2,
+                blockLocation.getBlockY(),
+                mine.getCenterLocation().getBlockZ() - (double) mine.getWidth() / 2
+        );
 
-            @Override
-            public void run() {
-                for (int x = mine.getCenterLocation().getBlockX() - mine.getWidth()/2; x <= mine.getCenterLocation().getBlockX()+ mine.getWidth()/2; x++) {
-                    for (int z = mine.getCenterLocation().getBlockZ()- mine.getWidth()/2; z <= mine.getCenterLocation().getBlockZ() + mine.getWidth()/2; z++) {
-                        blockChanges.put(new Location(blockLocation.getWorld(), x, blockLocation.getBlockY(), z), blockData);
-                    }
-                }
+        Location maxLoc = new Location(
+                mine.getCenterLocation().getWorld(),
+                mine.getCenterLocation().getBlockX() + (double) mine.getWidth() /2,
+                blockLocation.getBlockY(),
+                mine.getCenterLocation().getBlockZ() + (double) mine.getWidth() /2
+        );
+
+        Util.setBlocksFast(
+                minLoc,
+                maxLoc,
+                Bukkit.getPlayer(player.getUuid()),
+                Material.AIR
+        );
+
+        // Calculate blocks broken
+        int minedBlocks = (maxLoc.getBlockX() - minLoc.getBlockX()) * (maxLoc.getBlockZ() - minLoc.getBlockZ());
 
 
-                player.setTokens(player.getTokens() + Math.round(blockChanges.size() * player.getMultiplier(BoosterType.TOKENS))); // Add tokens
-                player.addBlocks(blockChanges.size());
-                Bukkit.getPlayer(player.getUuid()).sendMultiBlockChange(blockChanges, true);
-            }
-        }.runTaskAsynchronously(PrisonServer.getInstance());
+
+        player.setTokens(player.getTokens() + Math.round(minedBlocks * player.getMultiplier(BoosterType.TOKENS))); // Add tokens
+        player.addBlocks(minedBlocks);
+//        new BukkitRunnable() {
+//            HashMap<Location, BlockData> blockChanges = new HashMap<>();
+//            final BlockData blockData = Material.AIR.createBlockData();
+//
+//            @Override
+//            public void run() {
+//                for (int x = mine.getCenterLocation().getBlockX() - mine.getWidth()/2; x <= mine.getCenterLocation().getBlockX()+ mine.getWidth()/2; x++) {
+//                    for (int z = mine.getCenterLocation().getBlockZ()- mine.getWidth()/2; z <= mine.getCenterLocation().getBlockZ() + mine.getWidth()/2; z++) {
+//                        blockChanges.put(new Location(blockLocation.getWorld(), x, blockLocation.getBlockY(), z), blockData);
+//                    }
+//                }
+//
+//                Bukkit.getPlayer(player.getUuid()).sendMultiBlockChange(blockChanges, true);
+//            }
+//        }.runTaskAsynchronously(PrisonServer.getInstance());
     }
 }

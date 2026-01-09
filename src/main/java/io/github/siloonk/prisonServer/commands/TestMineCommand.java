@@ -19,7 +19,8 @@ public class TestMineCommand extends Command {
         Player player = (Player) commandSender;
         Mine mine = PrisonServer.getInstance().getMineManager().getMine(player.getUniqueId());
         if (mine == null) {
-            mine = new Mine(player.getUniqueId(), 53, 50, new Location(player.getWorld(), 148, 130, 144), Material.DIAMOND_BLOCK, 10);
+            // 53 width
+            mine = new Mine(player.getUniqueId(), 100, 50, new Location(player.getWorld(), 148, 130, 144), Material.DIAMOND_BLOCK, 10);
             PrisonServer.getInstance().getMineManager().registerMine(mine);
         }
         mine.displayMineToPlayer(player);

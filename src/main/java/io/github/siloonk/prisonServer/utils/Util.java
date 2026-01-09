@@ -5,14 +5,14 @@ import com.comphenix.protocol.events.PacketContainer;
 import io.github.siloonk.prisonServer.PrisonServer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Util {
@@ -71,7 +71,7 @@ public class Util {
     }
 
     public static void fakeExplosion(Location location, Player player) {
-        Bukkit.getScheduler().runTask(PrisonServer.getInstance(), () -> {\
+        Bukkit.getScheduler().runTask(PrisonServer.getInstance(), () -> {
             player.spawnParticle(
                     Particle.EXPLOSION,
                     location,
@@ -85,5 +85,49 @@ public class Util {
                     1.0f
             );
         });
+    }
+
+    public static void setBlocksFast(Location loc1, Location loc2, Player player, Material block) {
+        long now = System.currentTimeMillis();
+
+        Location minLoc = new Location(
+                loc1.getWorld(),
+                Math.min(loc1.getBlockX(), loc2.getBlockX()),
+                Math.min(loc1.getBlockY(), loc2.getBlockY()),
+                Math.min(loc1.getBlockZ(), loc2.getBlockZ())
+        );
+
+        Location maxLoc = new Location(
+                loc1.getWorld(),
+                Math.max(loc1.getBlockX(), loc2.getBlockX()),
+                Math.max(loc1.getBlockY(), loc2.getBlockY()),
+                Math.max(loc1.getBlockZ(), loc2.getBlockZ())
+        );
+
+        new BukkitRunnable() {
+            private HashMap<Location, BlockData> blockUpdates = new HashMap<>();
+            private final BlockData blockData = block.createBlockData();
+
+            @Override
+            public void run() {
+                for (int x = minLoc.getBlockX(); x <= maxLoc.getBlockX(); x++) {
+                    for (int y = maxLoc.getBlockY(); y >= minLoc.getBlockY(); y--) {
+                        for (int z = minLoc.getBlockZ(); z <= maxLoc.getBlockZ(); z++) {
+                            blockUpdates.put(new Location(minLoc.getWorld(), x, y, z), blockData);
+
+                            if (blockUpdates.size() > 1000) {
+                                player.sendMultiBlockChange(blockUpdates, true);
+                                blockUpdates.clear();
+                            }
+                        }
+                    }
+                }
+
+                player.sendMultiBlockChange(blockUpdates, true);
+
+                System.out.println(System.currentTimeMillis() - now);
+            }
+        }.runTaskAsynchronously(PrisonServer.getInstance());
+
     }
 }

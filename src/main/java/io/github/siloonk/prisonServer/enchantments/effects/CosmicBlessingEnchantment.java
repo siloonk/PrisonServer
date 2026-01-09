@@ -30,7 +30,7 @@ public class CosmicBlessingEnchantment extends Enchantment {
         Booster receivedBooster = new Booster(type, System.currentTimeMillis() + 60_000, booster);
         player.addBooster(receivedBooster);
         Bukkit.getPlayer(player.getUuid()).sendActionBar(MiniMessage.miniMessage().deserialize(
-                String.format("<dark_purple><bold>Cosmic Blessing<reset> <gray>»You have been given a <light_purple%.1fx %s Booster<gray> for <light_purple>60 seconds<gray>!",
+                String.format("<dark_purple><bold>Cosmic Blessing<reset> <gray>»You have been given a <light_purple>%.1fx %s Booster<gray> for <light_purple>60 seconds<gray>!",
                 booster, type.toString().toLowerCase())
         ));
     }

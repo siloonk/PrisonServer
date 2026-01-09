@@ -12,6 +12,7 @@ import io.github.siloonk.prisonServer.enchantments.effects.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -50,6 +51,8 @@ public class EnchantmentHandler implements Listener {
                 if (!item.getType().toString().contains("_PICKAXE")) return;
                 if (!item.hasItemMeta()) return;
                 ItemMeta meta = item.getItemMeta();
+
+                event.getPlayer().sendBlockChange(pos.toLocation(event.getPlayer().getWorld()) , Material.AIR.createBlockData());
 
                 item.editMeta(itemMeta -> {
                     PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
@@ -91,7 +94,7 @@ public class EnchantmentHandler implements Listener {
                 for (NamespacedKey key : enchantsContainer.getKeys()) {
                     Enchantment enchantment = enchantments.get(EnchantmentType.valueOf(key.getKey().toUpperCase()));
                     int level = enchantsContainer.getOrDefault(key, PersistentDataType.INTEGER, 0);
-                    double chance = enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel());
+                    double chance = (enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel())) / 100;
 
 
                     // Random value to determine success

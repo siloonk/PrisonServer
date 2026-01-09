@@ -1,6 +1,7 @@
 package io.github.siloonk.prisonServer.data.mines;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -120,23 +121,24 @@ public class Mine {
     }
 
     public void displayMineToPlayer(Player player) {
-        new BukkitRunnable() {
-            private HashMap<Location, BlockData> blockUpdates = new HashMap<>();
-            private final BlockData blockData = blockType.createBlockData();
+        Util.setBlocksFast(
+                new Location(
+                    centerLocation.getWorld(),
+                    centerLocation.getBlockX() - (double) width /2,
+                    centerLocation.getBlockY() - height,
+                        centerLocation.getBlockZ() - (double) width /2
+                ),
+                new Location(
+                        centerLocation.getWorld(),
+                        centerLocation.getBlockX() + (double) width /2,
+                        centerLocation.getBlockY(),
+                        centerLocation.getBlockZ() + (double) width /2
+                ),
+                player,
+                blockType
+        );
 
-            @Override
-            public void run() {
-                for (int x = centerLocation.getBlockX() - width/2; x <= centerLocation.getBlockX() + width / 2; x++) {
-                    for (int y = centerLocation.getBlockY(); y > centerLocation.getBlockY() - height; y--) {
-                        for (int z = centerLocation.getBlockZ() - width/2; z <= centerLocation.getBlockZ() + width/2; z++) {
-                            blockUpdates.put(new Location(centerLocation.getWorld(), x, y, z), blockData);
-                        }
-                    }
-                }
-                starCores.clear();
-                player.sendMultiBlockChange(blockUpdates, true);
-            }
-        }.runTaskAsynchronously(PrisonServer.getInstance());
+        starCores.clear();
 
     }
 
