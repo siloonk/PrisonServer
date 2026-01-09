@@ -13,6 +13,7 @@ import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
+import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
@@ -152,6 +153,7 @@ public class StarFallEnchantment extends Enchantment {
                 player.sendMultiBlockChange(blockChanges);
                 prisonPlayer.setTokens(prisonPlayer.getTokens() + Math.round(blockChanges.size() * prisonPlayer.getMultiplier(BoosterType.TOKENS)));
                 prisonPlayer.addBlocks(blockChanges.size());
+                Util.fakeExplosion(loc, player);
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
 

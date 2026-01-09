@@ -6,6 +6,7 @@ import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
+import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -43,7 +44,7 @@ public class StarCoreEnchantment extends Enchantment {
 
         Location loc = new Location(blockLocation.getWorld(), random.nextInt(minX, maxX), blockLocation.getBlockY(), random.nextInt(minZ, maxZ));
         Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
-        loc.getWorld().createExplosion(loc, 0f);
+        Util.fakeExplosion(loc, bukkitPlayer);
 
         bukkitPlayer.sendBlockChange(loc, blockData);
         player.setTokens(player.getTokens() + Math.round(player.getMultiplier(BoosterType.TOKENS)));

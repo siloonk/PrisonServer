@@ -7,6 +7,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -17,6 +19,8 @@ public class Util {
     private static char[] c = new char[]{'k', 'm', 'b', 't'};
 
     public static String formatNumber(double n, int iteration) {
+        if ((n < 1000 && n > 0) || (n > -1000 && n < 0)) return n + "";
+
         double d = n / 1000.0;
 
         if (d < 1000) {
@@ -64,5 +68,22 @@ public class Util {
 
         // Send only to this player
         PrisonServer.getInstance().getProtocolLibrary().sendServerPacket(Bukkit.getPlayer(player.getUniqueId()), lightning);
+    }
+
+    public static void fakeExplosion(Location location, Player player) {
+        Bukkit.getScheduler().runTask(PrisonServer.getInstance(), () -> {\
+            player.spawnParticle(
+                    Particle.EXPLOSION,
+                    location,
+                    1
+            );
+
+            player.playSound(
+                    location,
+                    Sound.ENTITY_GENERIC_EXPLODE,
+                    1.0f,
+                    1.0f
+            );
+        });
     }
 }

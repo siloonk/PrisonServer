@@ -3,6 +3,7 @@ package io.github.siloonk.prisonServer.listeners;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.utils.ComponentScoreboard;
+import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,18 +41,24 @@ public class ScoreboardHandler implements Listener {
         lines.addAll(yamlConfiguration.getStringList("lines"));
     }
 
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
 
         ComponentScoreboard board = new ComponentScoreboard(title);
-        PrisonPlayer prisonPlayer = PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
 
 
 
         new BukkitRunnable() {
+            PrisonPlayer prisonPlayer = PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+
             @Override
             public void run() {
+                if (prisonPlayer == null) {
+                    prisonPlayer = PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
+                    System.out.println("test");
+                    return;
+                }
+
                 int lineNumber = 0;
                 for (String line : lines) {
                     board.setLine(lineNumber, mm.deserialize(formatString(line, prisonPlayer)));
@@ -63,8 +70,8 @@ public class ScoreboardHandler implements Listener {
     }
 
     private String formatString(String s, PrisonPlayer player) {
-        return s.replaceAll("%money%", player.getMoney() + "")
-                .replaceAll("%tokens%", player.getTokens()+"")
+        return s.replaceAll("%money%", Util.formatNumber(player.getMoney(), 0))
+                .replaceAll("%tokens%", Util.formatNumber(player.getTokens(), 0))
                 .replaceAll("%bubbles%", player.getBubbles()+"")
                 .replaceAll("%mine_rank%", ranks[player.getLevel()-1])
                 .replaceAll("%prestige%", player.getPrestige()+"")

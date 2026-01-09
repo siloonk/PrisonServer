@@ -15,6 +15,7 @@ public class PrisonPlayer {
     private long money;
     private long bubbles;
     private long tokens;
+    private long relicDust;
 
     private int blocksMined;
 
@@ -34,11 +35,12 @@ public class PrisonPlayer {
 
     }
 
-    public PrisonPlayer(UUID uuid, long money, long bubbles, long tokens, int blocksMined, Timestamp timeJoined, int level, int prestige) {
+    public PrisonPlayer(UUID uuid, long money, long bubbles, long tokens, int relicDust, int blocksMined, Timestamp timeJoined, int level, int prestige) {
         this.uuid = uuid;
         this.money = money;
         this.bubbles = bubbles;
         this.tokens = tokens;
+        this.relicDust = relicDust;
         this.blocksMined = blocksMined;
         this.timeJoined = timeJoined;
         this.level = level;
@@ -169,5 +171,13 @@ public class PrisonPlayer {
         if (currency == Currency.TOKENS) tokens =  amount;
         else if (currency == Currency.MONEY) money = amount;
         else if (currency == Currency.BUBBLES) bubbles = amount;
+    }
+
+    public long getRelicDust() {
+        return relicDust;
+    }
+
+    public void setRelicDust(long relicDust) {
+        this.relicDust = relicDust;
     }
 }

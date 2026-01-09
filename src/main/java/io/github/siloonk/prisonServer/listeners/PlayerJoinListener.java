@@ -35,11 +35,11 @@ public class PlayerJoinListener implements Listener {
         PrisonServer plugin = PrisonServer.getInstance();
         Database db = plugin.getDatabase();
 
-        System.out.println(db.getPlayerDAO().getPlayerById(e.getPlayer().getUniqueId().toString()));
+        e.getPlayer().setAllowFlight(true);
 
         if (db.getPlayerDAO().getPlayerById(e.getPlayer().getUniqueId().toString()) == null) {
-            PrisonPlayer prisonPlayer = new PrisonPlayer(e.getPlayer().getUniqueId(), 0, 0, 0, 0, new Timestamp(new Date().getTime()), 1, 0);
-            db.getPlayerDAO().insertPlayer(prisonPlayer);
+            PrisonPlayer prisonPlayer = new PrisonPlayer(e.getPlayer().getUniqueId(), 0, 0, 0, 0, 0, new Timestamp(new Date().getTime()), 1, 0);
+            plugin.getPlayerManager().registerPlayer(prisonPlayer);
             e.getPlayer().sendMessage("Welcome to the server!");
             givePickaxe(e.getPlayer());
             return;
@@ -74,7 +74,7 @@ public class PlayerJoinListener implements Listener {
         meta.lore(lore);
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
-        container.set(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, 0);
+        container.set(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, 1);
         container.set(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, 350);
         container.set(PDCKeys.PICKAXE_BLOCKS_MINED_KEY, PersistentDataType.INTEGER, 0);
         container.set(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER, container.getAdapterContext().newPersistentDataContainer());

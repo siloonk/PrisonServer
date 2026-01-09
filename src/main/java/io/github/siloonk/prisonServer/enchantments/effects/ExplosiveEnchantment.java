@@ -1,18 +1,24 @@
 package io.github.siloonk.prisonServer.enchantments.effects;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
+import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ExplosiveEnchantment extends Enchantment {
@@ -50,6 +56,9 @@ public class ExplosiveEnchantment extends Enchantment {
                 player.setTokens(player.getTokens() + Math.round((blockChanges.size() * player.getMultiplier(BoosterType.TOKENS))));
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
-        blockLocation.getWorld().createExplosion(blockLocation, 0f);
+
+        Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+
+        Util.fakeExplosion(blockLocation, bukkitPlayer);
     }
 }

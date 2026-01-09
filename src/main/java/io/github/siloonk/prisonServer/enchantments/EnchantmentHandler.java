@@ -1,5 +1,10 @@
 package io.github.siloonk.prisonServer.enchantments;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.BlockPosition;
 import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
@@ -33,6 +38,74 @@ public class EnchantmentHandler implements Listener {
 
     public EnchantmentHandler() {
         loadEnchantmentsFromFile();
+
+        PrisonServer.getInstance().getProtocolLibrary().addPacketListener(new PacketAdapter(PrisonServer.getInstance(), ListenerPriority.HIGH, PacketType.Play.Client.BLOCK_DIG) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                if (event.getPlayer() == null) return;
+                BlockPosition pos = event.getPacket().getBlockPositionModifier().read(0);
+                if (pos == null) return;
+
+                ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
+                if (!item.getType().toString().contains("_PICKAXE")) return;
+                if (!item.hasItemMeta()) return;
+                ItemMeta meta = item.getItemMeta();
+
+                item.editMeta(itemMeta -> {
+                    PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+                    int pickaxeEXP = pdc.getOrDefault(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
+                    int pickaxeEXPRequired = pdc.getOrDefault(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, 350);
+                    int pickaxeLevel = pdc.getOrDefault(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, 0);
+                    pdc.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, ++pickaxeEXP);
+                    MiniMessage miniMessage = MiniMessage.miniMessage();
+
+
+                    List<Component> lore = itemMeta.lore();
+
+                    if (lore == null) {
+                        lore = new ArrayList<>();
+                    }
+
+                    // Levelup
+                    if (pickaxeEXP >= pickaxeEXPRequired) {
+                        pdc.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
+                        pickaxeEXPRequired = (int) Math.ceil(pickaxeEXPRequired * 1.25);
+                        pdc.set(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, pickaxeEXPRequired);
+                        pdc.set(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, ++pickaxeLevel);
+                        event.getPlayer().sendMessage(miniMessage.deserialize("<green>Your pickaxe has leveled up!"));
+                    }
+
+                    // Update pickaxe lore
+                    lore.set(4, miniMessage.deserialize("<aqua>|<reset><white> EXP: <gray>%d / %d".formatted(pickaxeEXP, pickaxeEXPRequired)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+                    lore.set(5, (miniMessage.deserialize("<aqua>| " + getProgressBar(pickaxeEXP, pickaxeEXPRequired)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
+                    lore.set(3, miniMessage.deserialize("<aqua>|<reset><white> Level: <gray>%d".formatted(pickaxeLevel)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
+                    itemMeta.lore(lore);
+                });
+
+
+
+                PersistentDataContainer pdc = meta.getPersistentDataContainer();
+                if (!pdc.has(PDCKeys.ENCHANTMENTS_KEY)) return;
+                PersistentDataContainer enchantsContainer = pdc.get(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER);
+                for (NamespacedKey key : enchantsContainer.getKeys()) {
+                    Enchantment enchantment = enchantments.get(EnchantmentType.valueOf(key.getKey().toUpperCase()));
+                    int level = enchantsContainer.getOrDefault(key, PersistentDataType.INTEGER, 0);
+                    double chance = enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel());
+
+
+                    // Random value to determine success
+                    Random random = new Random();
+                    double roll = random.nextDouble(); // Generates a value between 0.0 and 1.0
+
+                    if (roll < chance) {
+                        enchantment.execute(pos.toLocation(event.getPlayer().getWorld()), PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId()), level);
+                    }
+
+                }
+
+            }
+        });
     }
 
     public void registerEnchantment(EnchantmentType type, Enchantment enchantment) {
@@ -56,63 +129,6 @@ public class EnchantmentHandler implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-        if (!item.getType().toString().contains("_PICKAXE")) return;
-        if (!item.hasItemMeta()) return;
-        ItemMeta meta = item.getItemMeta();
-
-        item.editMeta(itemMeta -> {
-            PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
-
-            int pickaxeEXP = pdc.getOrDefault(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
-            int pickaxeEXPRequired = pdc.getOrDefault(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, 350);
-            int pickaxeLevel = pdc.getOrDefault(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, 0);
-            pdc.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, ++pickaxeEXP);
-            MiniMessage miniMessage = MiniMessage.miniMessage();
-
-
-            List<Component> lore = itemMeta.lore();
-
-            if (lore == null) {
-                lore = new ArrayList<>();
-            }
-
-            // Levelup
-            if (pickaxeEXP >= pickaxeEXPRequired) {
-                pdc.set(PDCKeys.PICKAXE_EXP_KEY, PersistentDataType.INTEGER, 0);
-                pickaxeEXPRequired = (int) Math.ceil(pickaxeEXPRequired * 1.25);
-                pdc.set(PDCKeys.PICKAXE_EXP_REQUIRED_KEY, PersistentDataType.INTEGER, pickaxeEXPRequired);
-                pdc.set(PDCKeys.PICKAXE_LEVEL, PersistentDataType.INTEGER, ++pickaxeLevel);
-                event.getPlayer().sendMessage(miniMessage.deserialize("<green>Your pickaxe has leveled up!"));
-            }
-
-            // Update pickaxe lore
-            lore.set(4, miniMessage.deserialize("<aqua>|<reset><white> EXP: <gray>%d / %d".formatted(pickaxeEXP, pickaxeEXPRequired)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
-            lore.set(5, (miniMessage.deserialize("<aqua>| " + getProgressBar(pickaxeEXP, pickaxeEXPRequired)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)));
-            lore.set(3, miniMessage.deserialize("<aqua>|<reset><white> Level: <gray>%d".formatted(pickaxeLevel)).decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE));
-            itemMeta.lore(lore);
-        });
-
-
-
-        PersistentDataContainer pdc = meta.getPersistentDataContainer();
-        if (!pdc.has(PDCKeys.ENCHANTMENTS_KEY)) return;
-        PersistentDataContainer enchantsContainer = pdc.get(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER);
-        for (NamespacedKey key : enchantsContainer.getKeys()) {
-            Enchantment enchantment = enchantments.get(EnchantmentType.valueOf(key.getKey().toUpperCase()));
-            int level = enchantsContainer.getOrDefault(key, PersistentDataType.INTEGER, 0);
-            double chance = enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel());
-
-
-            // Random value to determine success
-            Random random = new Random();
-            double roll = random.nextDouble(); // Generates a value between 0.0 and 1.0
-
-            if (roll < chance) {
-                enchantment.execute(event.getBlock().getLocation(), PrisonServer.getInstance().getPlayerManager().getPlayer(event.getPlayer().getUniqueId()), level);
-            }
-
-        }
 
     }
 
