@@ -1,9 +1,6 @@
 package io.github.siloonk.prisonServer;
 
-import io.github.siloonk.prisonServer.dao.CrateDAO;
-import io.github.siloonk.prisonServer.dao.MineDAO;
-import io.github.siloonk.prisonServer.dao.PlayerDAO;
-import io.github.siloonk.prisonServer.dao.WarpDAO;
+import io.github.siloonk.prisonServer.dao.*;
 import io.github.siloonk.prisonServer.mappers.UUIDColumnMapper;
 import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
@@ -18,6 +15,7 @@ public class Database {
     private final MineDAO mineDAO;
     private final WarpDAO warpDAO;
     private final CrateDAO crateDAO;
+    private final RelicDAO relicDAO;
 
     public Database() {
         if (!PrisonServer.getInstance().getDataFolder().exists()) {
@@ -31,12 +29,14 @@ public class Database {
         mineDAO = jdbi.onDemand(MineDAO.class);
         warpDAO = jdbi.onDemand(WarpDAO.class);
         crateDAO = jdbi.onDemand(CrateDAO.class);
+        relicDAO = jdbi.onDemand(RelicDAO.class);
 
 
         playerDAO.createTable();
         mineDAO.createTable();
         warpDAO.createTable();
         crateDAO.createTable();
+        relicDAO.createTable();
     }
 
 
@@ -48,5 +48,10 @@ public class Database {
     public MineDAO getMineDAO() {
         return mineDAO;
     }
+
+    public RelicDAO getRelicDAO() {
+        return relicDAO;
+    }
+
     public CrateDAO getCrateDAO() {return crateDAO;}
 }

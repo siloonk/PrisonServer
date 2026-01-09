@@ -88,8 +88,6 @@ public class Util {
     }
 
     public static void setBlocksFast(Location loc1, Location loc2, Player player, Material block) {
-        long now = System.currentTimeMillis();
-
         Location minLoc = new Location(
                 loc1.getWorld(),
                 Math.min(loc1.getBlockX(), loc2.getBlockX()),
@@ -124,8 +122,6 @@ public class Util {
                 }
 
                 player.sendMultiBlockChange(blockUpdates, true);
-
-                System.out.println(System.currentTimeMillis() - now);
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());
 

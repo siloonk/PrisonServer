@@ -20,9 +20,6 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -33,7 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class EnchantmentHandler implements Listener {
+public class EnchantmentHandler {
 
 
     public static HashMap<EnchantmentType, Enchantment> enchantments = new HashMap<>();
@@ -133,11 +130,6 @@ public class EnchantmentHandler implements Listener {
         NamespacedKey key = getKeyForEnchantment(getEnchantment(type));
         if (!(enchants.has(key))) return 0;
         return enchants.get(key, PersistentDataType.INTEGER);
-    }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-
     }
 
 

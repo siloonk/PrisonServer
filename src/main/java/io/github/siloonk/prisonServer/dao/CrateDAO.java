@@ -14,7 +14,7 @@ import java.util.List;
 @RegisterRowMapper(CrateMapper.class)
 public interface CrateDAO {
 
-    @SqlUpdate("CREATE TABLE IF NOT EXISTS crates (id TEXT PRIMARY KEY, world_name TEXT, x, INTEGER, y INTEGER, Z INTEGER)")
+    @SqlUpdate("CREATE TABLE IF NOT EXISTS crates (id TEXT PRIMARY KEY, world_name TEXT, x INTEGER, y INTEGER, Z INTEGER)")
     void createTable();
 
 

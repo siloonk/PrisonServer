@@ -14,6 +14,7 @@ import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
 import io.github.siloonk.prisonServer.data.relics.RelicManager;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
 import io.github.siloonk.prisonServer.inventories.EnchantmentInventory;
+import io.github.siloonk.prisonServer.inventories.RelicInventory;
 import io.github.siloonk.prisonServer.items.CustomItems;
 import io.github.siloonk.prisonServer.listeners.*;
 import org.bukkit.plugin.PluginManager;
@@ -97,12 +98,12 @@ public final class PrisonServer extends JavaPlugin {
     private void registerEvents() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoinListener(), this);
-        pm.registerEvents(enchantmentHandler, this);
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new CrateInteractEvent(), this);
         pm.registerEvents(new ScoreboardHandler(), this);
         pm.registerEvents(new RelicInteractListener(), this);
 
+        pm.registerEvents(new RelicInventory(), this);
         pm.registerEvents(new EnchantmentInventory(), this);
 
 

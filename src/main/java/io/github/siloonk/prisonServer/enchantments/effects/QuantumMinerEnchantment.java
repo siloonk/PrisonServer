@@ -13,7 +13,7 @@ import java.util.Random;
 
 public class QuantumMinerEnchantment extends Enchantment {
 
-    Random random = new Random();
+    private Random random = new Random();
 
     public QuantumMinerEnchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency) {
         super(name, description, maxLevel, baseCost, costIncrease, chanceAtMaxLevel, baseChance, currency);

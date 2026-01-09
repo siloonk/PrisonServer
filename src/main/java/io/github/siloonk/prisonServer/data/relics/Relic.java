@@ -1,6 +1,7 @@
 package io.github.siloonk.prisonServer.data.relics;
 
 import io.github.siloonk.prisonServer.PDCKeys;
+import io.github.siloonk.prisonServer.data.Rarity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -21,13 +22,15 @@ public class Relic {
     private final List<RelicType> types;
     private final double minBoost;
     private final double maxBoost;
+    private final Rarity rarity;
 
 
 
-    public Relic(List<RelicType> types, double minBoost, double maxBoost) {
+    public Relic(List<RelicType> types, double minBoost, double maxBoost, Rarity rarity) {
         this.types = types;
         this.minBoost = minBoost;
         this.maxBoost = maxBoost;
+        this.rarity = rarity;
     }
 
 
@@ -43,6 +46,9 @@ public class Relic {
         return maxBoost;
     }
 
+    public Rarity getRarity() {
+        return rarity;
+    }
 
     public ItemStack generateItem() {
         ItemStack item = new ItemStack(Material.NETHER_STAR);
@@ -67,6 +73,7 @@ public class Relic {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(PDCKeys.RELIC_BOOST, PersistentDataType.DOUBLE, boost);
         container.set(PDCKeys.RELIC_TYPE, PersistentDataType.STRING, type.toString());
+        container.set(PDCKeys.RARITY, PersistentDataType.STRING, rarity.toString());
 
         item.setItemMeta(meta);
         return item;

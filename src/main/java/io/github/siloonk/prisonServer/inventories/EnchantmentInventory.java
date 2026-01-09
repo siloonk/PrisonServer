@@ -85,7 +85,6 @@ public class EnchantmentInventory implements Listener {
         ItemStack tool = e.getWhoClicked().getInventory().getItemInMainHand();
         if (!tool.getType().toString().contains("_PICKAXE")) return;
 
-        System.out.println(e.getSlot());
         // Open the relic menu
         if (e.getSlot() == 28) {
             RelicInventory.open((Player) e.getWhoClicked());

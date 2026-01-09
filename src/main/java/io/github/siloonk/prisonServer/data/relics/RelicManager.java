@@ -37,8 +37,8 @@ public class RelicManager {
             double minBoost = relicSection.getInt("range.min")/ 100d;
             double maxBoost = relicSection.getInt("range.max")/ 100d;
 
-            Relic relic = new Relic(relics, minBoost, maxBoost);
             Rarity rarity = Rarity.valueOf(key.toUpperCase());
+            Relic relic = new Relic(relics, minBoost, maxBoost, rarity);
             this.relics.put(rarity, relic);
         }
     }

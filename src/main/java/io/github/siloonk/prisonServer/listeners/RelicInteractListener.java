@@ -26,6 +26,7 @@ public class RelicInteractListener implements Listener {
         ItemMeta meta = item.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         if (!(container.has(PDCKeys.RARITY))) return;
+        if (container.has(PDCKeys.RELIC_TYPE)) return;
 
         Rarity rarity = Rarity.valueOf(container.get(PDCKeys.RARITY, PersistentDataType.STRING));
         Relic relic = PrisonServer.getInstance().getRelicManager().getRelic(rarity);
