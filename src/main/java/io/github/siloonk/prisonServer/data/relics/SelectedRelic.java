@@ -6,29 +6,42 @@ import java.util.UUID;
 
 public class SelectedRelic {
 
+    private String id;
     private UUID owner;
-    private RelicType relicType;
+    private RelicType type;
     private Rarity rarity;
     private double boost;
 
-    public SelectedRelic(UUID owner, RelicType relicType, Rarity rarity, double boost) {
+    public SelectedRelic(String id, UUID owner, RelicType relicType, Rarity rarity, double boost) {
         this.owner = owner;
-        this.relicType = relicType;
+        this.type = relicType;
         this.rarity = rarity;
         this.boost = boost;
+        this.id = id;
     }
 
+    public SelectedRelic() {
+
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setOwner(UUID owner) {
         this.owner = owner;
     }
 
-    public void setRelicType(String relicType) {
-        this.relicType = RelicType.valueOf(relicType);
+    public void setType(String relicType) {
+        this.type = RelicType.valueOf(relicType);
     }
 
-    public void setRelicType(RelicType relicType) {
-        this.relicType = relicType;
+    public void setType(RelicType relicType) {
+        this.type = relicType;
     }
 
     public void setRarity(String rarity) {
@@ -47,8 +60,8 @@ public class SelectedRelic {
         return owner;
     }
 
-    public RelicType getRelicType() {
-        return relicType;
+    public RelicType getType() {
+        return type;
     }
 
     public Rarity getRarity() {

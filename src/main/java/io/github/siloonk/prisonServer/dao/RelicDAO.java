@@ -35,7 +35,7 @@ public interface RelicDAO {
 
     @SqlQuery("SELECT * FROM relics WHERE owner = :owner AND rarity = :rarity")
     @RegisterBeanMapper(SelectedRelic.class)
-    List<SelectedRelic> getRelicts(UUID owner, Rarity rarity);
+    List<SelectedRelic> getRelicts(@Bind("owner") UUID owner, @Bind("rarity") Rarity rarity);
 
     default void close() {
 

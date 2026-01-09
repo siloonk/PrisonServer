@@ -1,6 +1,7 @@
 package io.github.siloonk.prisonServer.data;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 
@@ -21,6 +22,6 @@ public enum Rarity {
     }
 
     public Component getName() {
-        return mm.deserialize(color + toString().charAt(0) + toString().substring(1).toLowerCase());
+        return mm.deserialize(color + toString().charAt(0) + toString().substring(1).toLowerCase()).decoration(TextDecoration.ITALIC, false);
     }
 }

@@ -2,8 +2,10 @@ package io.github.siloonk.prisonServer.inventories;
 
 import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.dao.RelicDAO;
 import io.github.siloonk.prisonServer.data.Rarity;
 import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -20,6 +22,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import javax.print.DocFlavor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class RelicInventory implements Listener {
 
@@ -46,33 +51,57 @@ public class RelicInventory implements Listener {
 
 
 
+
         // Common Relic Slots
         MENU.setItem(11, commonRelicItem);
-        MENU.setItem(20, getUnselectedrelicItem(Rarity.COMMON));
-        MENU.setItem(29, getUnselectedrelicItem(Rarity.COMMON));
-
+        setRelicItems(new int[]{20, 29}, Rarity.COMMON, player.getUniqueId());
         // Uncommon Relic SLots
         MENU.setItem(12, uncommonRelicItem);
-        MENU.setItem(21, getUnselectedrelicItem(Rarity.UNCOMMON));
-        MENU.setItem(30, getUnselectedrelicItem(Rarity.UNCOMMON));
-
-
+        setRelicItems(new int[]{21, 30}, Rarity.UNCOMMON, player.getUniqueId());
         // Rare Relic slots
         MENU.setItem(13, rareRelicItem);
-        MENU.setItem(22, getUnselectedrelicItem(Rarity.RARE));
-        MENU.setItem(31, getUnselectedrelicItem(Rarity.RARE));
-
+        setRelicItems(new int[]{22, 31}, Rarity.RARE, player.getUniqueId());
         // Epic Relic Slots
         MENU.setItem(14, epicRelicItem);
-        MENU.setItem(23, getUnselectedrelicItem(Rarity.EPIC));
-        MENU.setItem(32, getUnselectedrelicItem(Rarity.EPIC));
-
+        setRelicItems(new int[]{23, 32}, Rarity.EPIC, player.getUniqueId());
         // Legendary Relic Slots
         MENU.setItem(15, legendaryRelicItem);
-        MENU.setItem(24, getUnselectedrelicItem(Rarity.LEGENDARY));
-        MENU.setItem(33, getUnselectedrelicItem(Rarity.LEGENDARY));
+        setRelicItems(new int[]{24, 33}, Rarity.LEGENDARY, player.getUniqueId());
 
+        // Open the inventory to the player
         player.openInventory(MENU);
+    }
+
+    private static void setRelicItems(int[] slots, Rarity rarity, UUID owner) {
+        RelicDAO relicDao = PrisonServer.getInstance().getDatabase().getRelicDAO();
+
+        List<SelectedRelic> selectedRelics = relicDao.getRelicts(owner, rarity);
+
+        for (int i =0; i < 2; i++) {
+            if (selectedRelics.size() <= i) MENU.setItem(slots[i], getUnselectedrelicItem(rarity));
+            else MENU.setItem(slots[i], getSelectedRelic(selectedRelics.get(i)));
+        }
+
+
+    }
+
+    private static ItemStack getSelectedRelic(SelectedRelic relic) {
+        ItemStack item = new ItemStack(Material.NETHER_STAR);
+        item.editMeta(meta -> {
+            meta.displayName(relic.getRarity().getName().append(mm.deserialize(
+                    " <light_purple>%s <white>Relic".formatted(relic.getType().toString())
+            )));
+
+            meta.lore(List.of(
+                    mm.deserialize("<white>Boost <light_purple>%.1f%%".formatted(relic.getBoost() * 100)),
+                    mm.deserialize(""),
+                    mm.deserialize("<gray>Click to delete this relic, this action cannot be undone!")
+            ));
+
+            meta.getPersistentDataContainer().set(PDCKeys.ID, PersistentDataType.STRING, relic.getId());
+        });
+
+        return item;
     }
 
     private static ItemStack getRelicGlass(String displayName, Material itemType) {
@@ -102,15 +131,37 @@ public class RelicInventory implements Listener {
         if (event.getClickedInventory().equals(event.getWhoClicked().getInventory())) return;
         event.setCancelled(true);
 
+        ItemStack clickedItem = event.getCurrentItem();
+        if (clickedItem == null) return;
+
         ItemStack item = event.getWhoClicked().getItemOnCursor();
         if (!item.hasItemMeta()) {
-            event.getWhoClicked().sendMessage(mm.deserialize("<dark_purple><bold>Relics<reset> <gray>» <white>This item is not a <light_purple>relic<white>!"));
-            return;
+
+            // Check if we should delete the relic
+            if (item.getType().isEmpty() && clickedItem.getType() != Material.NETHER_STAR) {
+                event.getWhoClicked().sendMessage(mm.deserialize("<dark_purple><bold>Relics<reset> <gray>» <white>This item is not a <light_purple>relic<white>!"));
+                return;
+            }
+
+            // Add deleting of things
+            PersistentDataContainer pdc = clickedItem.getItemMeta().getPersistentDataContainer();
+            if (pdc.has(PDCKeys.COUNTER, PersistentDataType.INTEGER)) {
+                PrisonServer.getInstance().getDatabase().getRelicDAO().deleteRelic(pdc.get(PDCKeys.ID, PersistentDataType.STRING));
+                open((Player) event.getWhoClicked());
+                event.getWhoClicked().sendMessage(mm.deserialize("<dark_purple>Relics<reset> <gray>» <white>You have successfully <light_purple>deleted<white> this relic!"));
+                return;
+            }
+
+            clickedItem.editMeta(meta -> {
+                meta.getPersistentDataContainer().set(PDCKeys.COUNTER, PersistentDataType.INTEGER, 1);
+                List<Component> lore = meta.lore();
+                if (lore == null) lore = new ArrayList<>();
+                lore.add(mm.deserialize("<red>Click again to delete!"));
+                meta.lore(lore);
+            });
         }
 
         // Make sure we are clicking the buttons AKA unselected slots.
-        ItemStack clickedItem = event.getCurrentItem();
-        if (clickedItem == null) return;
         if (clickedItem.getType() != Material.STONE_BUTTON) return;
         PersistentDataContainerView clickedItemContainer = clickedItem.getPersistentDataContainer();
 
@@ -131,8 +182,17 @@ public class RelicInventory implements Listener {
             return;
         }
 
-        event.getWhoClicked().sendMessage("PLACING ITEM");
+        SelectedRelic relic = new SelectedRelic(
+                UUID.randomUUID().toString(),
+                event.getWhoClicked().getUniqueId(),
+                relicType,
+                rarity,
+                boost
+        );
 
-
+        item.setAmount(item.getAmount() - 1);
+        PrisonServer.getInstance().getDatabase().getRelicDAO().insertRelic(relic);
+        event.getWhoClicked().sendMessage(mm.deserialize("<dark_purple><bold>Relics<reset> <gray>» <white>You have applied a <light_purple>%.1f%% %s<white> relic!".formatted(boost * 100, relicType)));
+        open((Player) event.getWhoClicked());
     }
 }
