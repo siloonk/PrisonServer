@@ -51,9 +51,14 @@ public class CosmicRiftEnchantment extends Enchantment {
                     double distance = blackHoleLocation.distance(loc);
                     if (distance > blackHoleRadius) continue;
                     if (distance < blackHoleRadius + scale && distance > blackHoleRadius - scale) {
-                        Display display = createBlackHoleSphere(loc);
-                        bukkitPlayer.showEntity(PrisonServer.getInstance(), display);
-                        killDisplay(display, 10);
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                Display display = createBlackHoleSphere(loc);
+                                bukkitPlayer.showEntity(PrisonServer.getInstance(), display);
+                                killDisplay(display, 10);
+                            }
+                        }.runTask(PrisonServer.getInstance());
                     }
                 }
             }

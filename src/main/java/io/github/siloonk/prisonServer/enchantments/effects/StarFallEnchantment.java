@@ -54,11 +54,11 @@ public class StarFallEnchantment extends Enchantment {
             Location randomLoc = new Location(blockLocation.getWorld(), random.nextInt(minX, maxX), blockLocation.getBlockY() + 20, random.nextInt(minZ, maxZ));
 
 
-            createFireworkEffect(mine, randomLoc, player);
+            createFireworkEffect(mine, randomLoc, player, blockLocation.getBlockY());
         }
     }
 
-    private void createFireworkEffect(Mine mine, Location loc, PrisonPlayer prisonPlayer) {
+    private void createFireworkEffect(Mine mine, Location loc, PrisonPlayer prisonPlayer, int targetY) {
         new BukkitRunnable() {
 
             @Override
@@ -69,7 +69,7 @@ public class StarFallEnchantment extends Enchantment {
                 loc.add(0, -1, 0);
 
 
-                if (mine.isWithin(loc)) {
+                if (mine.isWithin(loc) && loc.getBlockY() == targetY) {
                     Player mineOwner = Bukkit.getPlayer(mine.getOwner());
                     createExplosion(mineOwner, loc, 10, prisonPlayer, mine);
                     cancel();

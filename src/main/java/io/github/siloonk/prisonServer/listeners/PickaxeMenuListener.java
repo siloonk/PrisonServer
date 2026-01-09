@@ -1,6 +1,6 @@
 package io.github.siloonk.prisonServer.listeners;
 
-import io.github.siloonk.prisonServer.enchantments.EnchantmentInventory;
+import io.github.siloonk.prisonServer.inventories.EnchantmentInventory;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

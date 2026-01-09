@@ -1,10 +1,11 @@
-package io.github.siloonk.prisonServer.enchantments;
+package io.github.siloonk.prisonServer.inventories;
 
-import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
-import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
+import io.github.siloonk.prisonServer.enchantments.Enchantment;
+import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
+import io.github.siloonk.prisonServer.enchantments.EnchantmentType;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -18,7 +19,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,12 +79,21 @@ public class EnchantmentInventory implements Listener {
         if (e.getCurrentItem() == null) return;
         if (!e.getCurrentItem().hasItemMeta()) return;
         e.setCancelled(true);
-        if (e.getCurrentItem().getType() != Material.BOOK) return;
 
 
         // Get the pickaxe the player is holding
         ItemStack tool = e.getWhoClicked().getInventory().getItemInMainHand();
         if (!tool.getType().toString().contains("_PICKAXE")) return;
+
+        System.out.println(e.getSlot());
+        // Open the relic menu
+        if (e.getSlot() == 28) {
+            RelicInventory.open((Player) e.getWhoClicked());
+            return;
+        }
+
+        // If we aren't clicking the relic button then make sure we are clicking a book.
+        if (e.getCurrentItem().getType() != Material.BOOK) return;
 
         // Retrieve the enchantment name from the clicked item
         ItemStack clickedItem = e.getCurrentItem();
