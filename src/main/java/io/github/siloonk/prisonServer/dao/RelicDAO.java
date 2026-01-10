@@ -27,6 +27,7 @@ public interface RelicDAO {
     void deleteRelic(@Bind("id") String id);
 
     @SqlQuery("SELECT * FROM relics WHERE id = :id")
+    @RegisterBeanMapper(SelectedRelic.class)
     SelectedRelic getRelic(@Bind("id") String id);
 
     @SqlQuery("SELECT * FROM relics")

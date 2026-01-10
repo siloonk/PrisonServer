@@ -7,7 +7,6 @@ public class PDCKeys {
 
     // Container tags
     public static final NamespacedKey ENCHANTMENTS_KEY = new NamespacedKey("prisons", "enchantments");
-    public static final NamespacedKey RUNES_KEY = new NamespacedKey("prisons", "runes");
 
 
     public static final NamespacedKey EXPLOSIVE_KEY = new NamespacedKey("prisons", "explosive");

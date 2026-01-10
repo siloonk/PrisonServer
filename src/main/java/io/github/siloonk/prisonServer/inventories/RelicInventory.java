@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,9 +46,6 @@ public class RelicInventory implements Listener {
         ItemStack rareRelicItem = getRelicGlass("<aqua>Rare Relics", Material.LIGHT_BLUE_STAINED_GLASS_PANE);
         ItemStack epicRelicItem = getRelicGlass("<light_purple>Epic Relics", Material.MAGENTA_STAINED_GLASS_PANE);
         ItemStack legendaryRelicItem = getRelicGlass("<red>Legendary Relics", Material.ORANGE_STAINED_GLASS_PANE);
-
-
-
 
         // Common Relic Slots
         MENU.setItem(11, commonRelicItem);
@@ -94,7 +90,7 @@ public class RelicInventory implements Listener {
             meta.lore(List.of(
                     mm.deserialize("<white>Boost <light_purple>%.1f%%".formatted(relic.getBoost() * 100)),
                     mm.deserialize(""),
-                    mm.deserialize("<gray>Click to delete this relic, this action cannot be undone!")
+                    mm.deserialize("<gray>Click to deselect this relic!")
             ));
 
             meta.getPersistentDataContainer().set(PDCKeys.ID, PersistentDataType.STRING, relic.getId());
@@ -144,20 +140,23 @@ public class RelicInventory implements Listener {
 
             // Add deleting of things
             PersistentDataContainer pdc = clickedItem.getItemMeta().getPersistentDataContainer();
-            if (pdc.has(PDCKeys.COUNTER, PersistentDataType.INTEGER)) {
-                PrisonServer.getInstance().getDatabase().getRelicDAO().deleteRelic(pdc.get(PDCKeys.ID, PersistentDataType.STRING));
-                open((Player) event.getWhoClicked());
-                event.getWhoClicked().sendMessage(mm.deserialize("<dark_purple>Relics<reset> <gray>» <white>You have successfully <light_purple>deleted<white> this relic!"));
-                return;
-            }
 
-            clickedItem.editMeta(meta -> {
-                meta.getPersistentDataContainer().set(PDCKeys.COUNTER, PersistentDataType.INTEGER, 1);
-                List<Component> lore = meta.lore();
-                if (lore == null) lore = new ArrayList<>();
-                lore.add(mm.deserialize("<red>Click again to delete!"));
-                meta.lore(lore);
+            SelectedRelic relic = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelic(pdc.get(PDCKeys.ID, PersistentDataType.STRING));
+            ItemStack newRelic = new ItemStack(Material.NETHER_STAR);
+            newRelic.editMeta(meta -> {
+                meta.displayName(mm.deserialize("<light_purple>%s Relic".formatted(relic.getType().toString())).decoration(TextDecoration.ITALIC, false));
+                meta.lore(List.of(mm.deserialize("<gray>This relic gives a <light_purple>%.0f%% %s<gray> boost".formatted(relic.getBoost()*100, relic.getType().toString())).decoration(TextDecoration.ITALIC, false)));
+
+                meta.getPersistentDataContainer().set(PDCKeys.RELIC_BOOST, PersistentDataType.DOUBLE, relic.getBoost());
+                meta.getPersistentDataContainer().set(PDCKeys.RELIC_TYPE, PersistentDataType.STRING, relic.getType().toString());
+                meta.getPersistentDataContainer().set(PDCKeys.RARITY, PersistentDataType.STRING, relic.getRarity().toString());
             });
+            event.getWhoClicked().getInventory().addItem(newRelic);
+
+            PrisonServer.getInstance().getDatabase().getRelicDAO().deleteRelic(pdc.get(PDCKeys.ID, PersistentDataType.STRING));
+            open((Player) event.getWhoClicked());
+            event.getWhoClicked().sendMessage(mm.deserialize("<dark_purple>Relics<reset> <gray>» <white>You have successfully <light_purple>deselected<white> this relic!"));
+            return;
         }
 
         // Make sure we are clicking the buttons AKA unselected slots.
