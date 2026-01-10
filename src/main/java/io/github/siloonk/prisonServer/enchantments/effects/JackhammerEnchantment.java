@@ -5,6 +5,8 @@ import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
@@ -15,6 +17,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class JackhammerEnchantment extends Enchantment {
 
@@ -52,22 +55,14 @@ public class JackhammerEnchantment extends Enchantment {
 
 
 
-        player.setTokens(player.getTokens() + Math.round(minedBlocks * player.getMultiplier(BoosterType.TOKENS))); // Add tokens
+        // Token Relic
+        List<SelectedRelic> selectedRelicList = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelicByType(player.getUuid(), RelicType.TOKENS);
+        double boost = 1;
+        if (!selectedRelicList.isEmpty()) {
+            boost += selectedRelicList.stream().mapToDouble(SelectedRelic::getBoost).sum();
+        }
+        player.setTokens(player.getTokens() + Math.round(minedBlocks * player.getMultiplier(BoosterType.TOKENS) * boost)); // Add tokens
         player.addBlocks(minedBlocks);
-//        new BukkitRunnable() {
-//            HashMap<Location, BlockData> blockChanges = new HashMap<>();
-//            final BlockData blockData = Material.AIR.createBlockData();
-//
-//            @Override
-//            public void run() {
-//                for (int x = mine.getCenterLocation().getBlockX() - mine.getWidth()/2; x <= mine.getCenterLocation().getBlockX()+ mine.getWidth()/2; x++) {
-//                    for (int z = mine.getCenterLocation().getBlockZ()- mine.getWidth()/2; z <= mine.getCenterLocation().getBlockZ() + mine.getWidth()/2; z++) {
-//                        blockChanges.put(new Location(blockLocation.getWorld(), x, blockLocation.getBlockY(), z), blockData);
-//                    }
-//                }
-//
-//                Bukkit.getPlayer(player.getUuid()).sendMultiBlockChange(blockChanges, true);
-//            }
-//        }.runTaskAsynchronously(PrisonServer.getInstance());
+
     }
 }

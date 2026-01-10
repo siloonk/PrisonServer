@@ -2,6 +2,7 @@ package io.github.siloonk.prisonServer.dao;
 
 import io.github.siloonk.prisonServer.crates.CrateBlock;
 import io.github.siloonk.prisonServer.data.Rarity;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
 import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
@@ -9,6 +10,7 @@ import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +38,11 @@ public interface RelicDAO {
 
     @SqlQuery("SELECT * FROM relics WHERE owner = :owner AND rarity = :rarity")
     @RegisterBeanMapper(SelectedRelic.class)
-    List<SelectedRelic> getRelicts(@Bind("owner") UUID owner, @Bind("rarity") Rarity rarity);
+    List<SelectedRelic> getRelics(@Bind("owner") UUID owner, @Bind("rarity") Rarity rarity);
+
+    @SqlQuery("SELECT * FROM relics WHERE owner = :owner AND type = :type")
+    @RegisterBeanMapper(SelectedRelic.class)
+    List<SelectedRelic> getRelicByType(@Bind("owner") UUID owner, @Bind("type") RelicType type);
 
     default void close() {
 

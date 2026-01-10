@@ -9,6 +9,8 @@ import io.github.siloonk.prisonServer.PDCKeys;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.github.siloonk.prisonServer.enchantments.effects.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -95,9 +97,16 @@ public class EnchantmentHandler {
                 PersistentDataContainer enchantsContainer = pdc.get(PDCKeys.ENCHANTMENTS_KEY, PersistentDataType.TAG_CONTAINER);
                 for (NamespacedKey key : enchantsContainer.getKeys()) {
                     Enchantment enchantment = enchantments.get(EnchantmentType.valueOf(key.getKey().toUpperCase()));
+                    EnchantmentType enchantmentType = enchantment.getType();
+
                     int level = enchantsContainer.getOrDefault(key, PersistentDataType.INTEGER, 0);
                     double chance = (enchantment.getBaseChance() + level * ((enchantment.getChanceAtMaxLevel() - enchantment.getBaseChance()) / enchantment.getMaxLevel())) / 100;
 
+                    List<SelectedRelic> selectedRelic = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelicByType(player.getUuid(), RelicType.valueOf(enchantmentType.toString()));
+                    if (!selectedRelic.isEmpty()) {
+                        double totalBoost = selectedRelic.stream().mapToDouble(SelectedRelic::getBoost).sum() + 1;
+                        chance *= totalBoost;
+                    }
 
                     // Random value to determine success
                     Random random = new Random();
@@ -114,6 +123,7 @@ public class EnchantmentHandler {
     }
 
     public void registerEnchantment(EnchantmentType type, Enchantment enchantment) {
+        enchantment.setType(type);
         enchantments.put(type,enchantment);
     }
 

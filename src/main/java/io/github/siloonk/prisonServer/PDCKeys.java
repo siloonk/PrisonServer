@@ -37,6 +37,5 @@ public class PDCKeys {
 
     public static final NamespacedKey ORIGIN_ITEM_NAME = new NamespacedKey("prisons", "original_item_name");
 
-    public static final NamespacedKey COUNTER = new NamespacedKey("prisons", "counter");
     public static final NamespacedKey ID = new NamespacedKey("prisons", "id");
 }

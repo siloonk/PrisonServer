@@ -7,6 +7,8 @@ import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
@@ -19,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class LightningEnchantment extends Enchantment {
 
@@ -54,7 +57,15 @@ public class LightningEnchantment extends Enchantment {
 
                 Player bukkitPlayer= Bukkit.getPlayer(player.getUuid());
                 bukkitPlayer.sendMultiBlockChange(blockChanges);
-                player.setTokens(player.getTokens() + Math.round(blockChanges.size() * player.getMultiplier(BoosterType.TOKENS)));
+
+                // Token Relic
+                List<SelectedRelic> selectedRelicList = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelicByType(player.getUuid(), RelicType.TOKENS);
+                double boost = 1;
+                if (!selectedRelicList.isEmpty()) {
+                    boost += selectedRelicList.stream().mapToDouble(SelectedRelic::getBoost).sum();
+                }
+
+                player.setTokens(player.getTokens() + Math.round(blockChanges.size() * player.getMultiplier(BoosterType.TOKENS) * boost));
                 player.addBlocks(blockChanges.size());
             }
         }.runTaskAsynchronously(PrisonServer.getInstance());

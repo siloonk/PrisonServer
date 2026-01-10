@@ -41,19 +41,6 @@ public class AetherSurgeEnchantment extends Enchantment {
             Util.strikeLightning(blockLocation, bukkitPlayer);
 
         }
-
-        /*
-        bukkitPlayer.setPlayerWeather(WeatherType.DOWNFALL);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                bukkitPlayer.resetPlayerWeather();
-            }
-        }.runTaskLater(PrisonServer.getInstance(), 15000);
-        bukkitPlayer.sendActionBar(MiniMessage.miniMessage().deserialize(
-                "<dark_purple><bold>Aether Surge<reset> <gray>»A storm has been rising raising your <light_purple>rewards <gray>for <light_purple>15 seconds<gray>!"
-                )
-        );*/
     }
 
 }

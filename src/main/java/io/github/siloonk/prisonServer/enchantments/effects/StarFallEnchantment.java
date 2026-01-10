@@ -12,6 +12,8 @@ import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
@@ -151,7 +153,14 @@ public class StarFallEnchantment extends Enchantment {
                 }
 
                 player.sendMultiBlockChange(blockChanges);
-                prisonPlayer.setTokens(prisonPlayer.getTokens() + Math.round(blockChanges.size() * prisonPlayer.getMultiplier(BoosterType.TOKENS)));
+                // Token Relic
+                List<SelectedRelic> selectedRelicList = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelicByType(player.getUniqueId(), RelicType.TOKENS);
+                double boost = 1;
+                if (!selectedRelicList.isEmpty()) {
+                    boost += selectedRelicList.stream().mapToDouble(SelectedRelic::getBoost).sum();
+                }
+
+                prisonPlayer.setTokens(prisonPlayer.getTokens() + Math.round(blockChanges.size() * prisonPlayer.getMultiplier(BoosterType.TOKENS)*boost));
                 prisonPlayer.addBlocks(blockChanges.size());
                 Util.fakeExplosion(loc, player);
             }

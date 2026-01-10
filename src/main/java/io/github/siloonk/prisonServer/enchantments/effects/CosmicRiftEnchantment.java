@@ -8,6 +8,8 @@ import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -21,6 +23,7 @@ import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -74,6 +77,12 @@ public class CosmicRiftEnchantment extends Enchantment {
                 runCount++;
 
 
+                // Token Relic
+                List<SelectedRelic> selectedRelicList = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelicByType(player.getUuid(), RelicType.TOKENS);
+                double boost = 1;
+                if (!selectedRelicList.isEmpty()) {
+                    boost += selectedRelicList.stream().mapToDouble(SelectedRelic::getBoost).sum();
+                }
                 for (int x = blackHoleLocation.getBlockX()-runCount; x <= blackHoleLocation.getBlockX()+runCount; x++) {
                     for (int y = blackHoleLocation.getBlockY()-runCount;y<= blackHoleLocation.getBlockY()+runCount;y++) {
                         for (int z = blackHoleLocation.getBlockZ()-runCount;z<=blackHoleLocation.getBlockZ()+runCount;z++) {
@@ -85,7 +94,7 @@ public class CosmicRiftEnchantment extends Enchantment {
                             BlockData blockType = mine.getBlockType().createBlockData();
                             bukkitPlayer.sendBlockChange(newLoc, Material.AIR.createBlockData());
                             player.addBlocks(1);
-                            player.setTokens(player.getTokens() + 1);
+                            player.setTokens(player.getTokens() + Math.round(1*boost));
 
                             if (Math.random() > 0.005) continue;
                             BlockDisplay display = blockLocation.getWorld().spawn(newLoc, BlockDisplay.class, entity -> {

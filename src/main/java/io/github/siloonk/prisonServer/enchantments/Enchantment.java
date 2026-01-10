@@ -17,6 +17,7 @@ public abstract class Enchantment {
 
     private double chanceAtMaxLevel;
     private double baseChance;
+    private EnchantmentType type;
 
 
     public Enchantment(Component name, Component description, int maxLevel, int baseCost, double costIncrease, double chanceAtMaxLevel, double baseChance, Currency currency) {
@@ -30,6 +31,14 @@ public abstract class Enchantment {
         this.currency = currency;
     }
 
+
+    public void setType(EnchantmentType type) {
+        this.type = type;
+    }
+
+    public EnchantmentType getType() {
+        return type;
+    }
 
     public abstract void execute(Location blockLocation, PrisonPlayer player, int level);
 

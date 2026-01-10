@@ -5,6 +5,8 @@ import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.data.mines.Mine;
 import io.github.siloonk.prisonServer.data.BoosterType;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayer;
+import io.github.siloonk.prisonServer.data.relics.RelicType;
+import io.github.siloonk.prisonServer.data.relics.SelectedRelic;
 import io.github.siloonk.prisonServer.enchantments.Enchantment;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;
@@ -16,6 +18,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class StarCoreEnchantment extends Enchantment {
@@ -47,7 +50,13 @@ public class StarCoreEnchantment extends Enchantment {
         Util.fakeExplosion(loc, bukkitPlayer);
 
         bukkitPlayer.sendBlockChange(loc, blockData);
-        player.setTokens(player.getTokens() + Math.round(player.getMultiplier(BoosterType.TOKENS)));
+        // Token Relic
+        List<SelectedRelic> selectedRelicList = PrisonServer.getInstance().getDatabase().getRelicDAO().getRelicByType(player.getUuid(), RelicType.TOKENS);
+        double boost = 1;
+        if (!selectedRelicList.isEmpty()) {
+            boost += selectedRelicList.stream().mapToDouble(SelectedRelic::getBoost).sum();
+        }
+        player.setTokens(player.getTokens() + Math.round(player.getMultiplier(BoosterType.TOKENS) * boost));
         player.addBlocks(1);
         mine.addStarCore(loc);
         bukkitPlayer.sendActionBar(miniMessage.deserialize("<dark_purple><bold>Star Core<reset> <gray>» A <light_purple>Star Core<gray> has been spawned somewhere in your mine!"));

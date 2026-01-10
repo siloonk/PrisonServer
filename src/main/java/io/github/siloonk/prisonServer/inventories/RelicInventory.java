@@ -70,7 +70,7 @@ public class RelicInventory implements Listener {
     private static void setRelicItems(int[] slots, Rarity rarity, UUID owner) {
         RelicDAO relicDao = PrisonServer.getInstance().getDatabase().getRelicDAO();
 
-        List<SelectedRelic> selectedRelics = relicDao.getRelicts(owner, rarity);
+        List<SelectedRelic> selectedRelics = relicDao.getRelics(owner, rarity);
 
         for (int i =0; i < 2; i++) {
             if (selectedRelics.size() <= i) MENU.setItem(slots[i], getUnselectedrelicItem(rarity));
