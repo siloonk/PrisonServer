@@ -1,7 +1,5 @@
-package io.github.siloonk.prisonServer.items;
+package io.github.siloonk.prisonServer;
 
-import io.github.siloonk.prisonServer.PDCKeys;
-import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Rarity;
 import io.github.siloonk.prisonServer.utils.Util;
 import net.kyori.adventure.text.Component;

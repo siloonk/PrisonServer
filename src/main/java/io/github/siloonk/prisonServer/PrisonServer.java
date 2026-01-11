@@ -15,7 +15,6 @@ import io.github.siloonk.prisonServer.data.relics.RelicManager;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
 import io.github.siloonk.prisonServer.inventories.EnchantmentInventory;
 import io.github.siloonk.prisonServer.inventories.RelicInventory;
-import io.github.siloonk.prisonServer.items.CustomItems;
 import io.github.siloonk.prisonServer.listeners.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
