@@ -134,5 +134,6 @@ public final class PrisonServer extends JavaPlugin {
         getServer().getCommandMap().register("prisons", new CustomEnchantCommand());
         getServer().getCommandMap().register("prisons", new ItemCommand());
         getServer().getCommandMap().register("prisons", new CratesCommand());
+        getServer().getCommandMap().register("prisons", new MineCommand());
     }
 }

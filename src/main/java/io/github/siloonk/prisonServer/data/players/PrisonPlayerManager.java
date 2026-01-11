@@ -1,10 +1,12 @@
 package io.github.siloonk.prisonServer.data.players;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class PrisonPlayerManager {
@@ -15,7 +17,6 @@ public class PrisonPlayerManager {
     public PrisonPlayerManager() {
         loadPlayers();
         savePlayers();
-        System.out.println(players.size());
     }
 
 
@@ -56,7 +57,12 @@ public class PrisonPlayerManager {
             public void run() {
                 System.out.println("Saving all player data");
                 players.forEach((uuid, prisonPlayer) -> PrisonServer.getInstance().getDatabase().getPlayerDAO().update(prisonPlayer));
-                System.out.println("Saved all player data");
+
+                // Delete all players from the list that are no longer online, to make sure ram isn't getting wasted
+                List<UUID> offlinePlayers = players.keySet().stream().filter((uuid) -> Bukkit.getPlayer(uuid) == null).toList();
+                offlinePlayers.forEach((p) -> players.remove(p));
+
+                System.out.printf("Saved all player data Cleaned %d players%n", offlinePlayers.size());
             }
         }.runTaskTimer(PrisonServer.getInstance(), 60*20L, 60*20L);
     }

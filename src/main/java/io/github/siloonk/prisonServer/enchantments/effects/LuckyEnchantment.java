@@ -44,7 +44,6 @@ public class LuckyEnchantment extends Enchantment {
             boost += selectedRelicList.stream().mapToDouble(SelectedRelic::getBoost).sum();
         }
 
-        System.out.println(boost);
         player.setTokens(player.getTokens() + Math.round(amount*boost));
         Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
         bukkitPlayer.sendActionBar(miniMessage.deserialize(String.format("<dark_purple><bold>Lucky<reset> <gray>» <gray>You have found <light_purple>%s Tokens<gray>!", Util.formatNumber(amount*boost, 0))));
