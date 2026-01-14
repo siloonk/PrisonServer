@@ -1,0 +1,132 @@
+boss:
+  display_name: "<red>Example Boss"
+  max_health: 500
+  movement_speed: 1.5
+
+  player_spawn:
+    x: 100
+    y: 100
+    z: 100
+    world: 'overworld'
+
+  boss_spawn:
+    x: 150
+    y: 100
+    z: 100
+    world: 'overworld'
+
+  monster_spawns:
+    1:
+      x: 140
+      y: 100
+      z: 100
+      world: 'overworld'
+    2:
+      x: 100
+      y: 100
+      z: 100
+      world: 'overworld'
+
+  # These are the rewards for most damage
+  rewards:
+    '1':
+      type: ITEM
+      id: BUBBLE_WAND
+      amount: 1
+
+    '2':
+      type: CURRENCY
+      curency: tokens
+      amount: 1000000
+
+    '3':
+      type: COMMAND
+      command: 'give %player% diamond_pickaxe 1'
+
+  # Similar format as the rewards
+  participation_rewards:
+    '1':
+      type: ITEM
+      id: COMMON_KEY
+      amount: 5
+
+  abilities:
+    1:
+      disarm:
+      knockback:
+        range: 10
+        force: 5
+        damage: 0
+
+    2:
+      disarm:
+      knockback:
+        range: 10
+        force: 7
+        damage: 2
+      enraged:
+      ultimate_defense:
+        shields: 5
+        health: 50
+
+  # All monsters per phase
+  monsters:
+    1:
+      - cool_monster
+    2:
+      - cool_monster
+
+
+  armor:
+    helmet:
+      type: GOLDEN_HELMET
+      enchantments:
+        unbreaking: 255
+        thorns: 2
+        protection: 5
+
+    chestplate:
+      type: GOLDEN_CHESTPLATE
+      enchantments:
+        unbreaking: 255
+        thorns: 2
+        protection: 5
+
+# Define monsters
+monsters:
+  cool_monster:
+    display_name: "<red>Cool Monster"
+    monster_type: ZOMBIE
+    movement_speed: 1
+    max_health: 10
+
+    # Potion effects the monster will spawn with
+    potion_effects:
+      regeneration:
+        duration: 500
+        tier: 1
+
+    armor:
+      helmet:
+        type: DIAMOND_HELMET
+        enchantments:
+          protection: 4
+          thorns: 3
+
+      chestplate:
+        type: DIAMOND_CHESTPLATE
+        enchantments:
+          protection: 4
+          thorns: 3
+
+      leggings:
+        type: DIAMOND_LEGGINGS
+        enchantments:
+          protection: 4
+          thorns: 3
+
+      boots:
+        type: DIAMOND_BOOTS
+        enchantments:
+          protection: 4
+          thorns: 3

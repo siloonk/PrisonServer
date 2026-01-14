@@ -24,6 +24,11 @@ public class Dungeon {
     private List<Location> dungeonMonsterLocations = new ArrayList<>();
 
     /**
+     * Keep track of all dungeon monsters that can be spawned within this dungeon
+     */
+    private List<DungeonMonster> monsters = new ArrayList<>();
+
+    /**
      * Name of the dungeon
      */
     private String name;
@@ -77,5 +82,14 @@ public class Dungeon {
     public Dungeon setDungeonBoss(DungeonBoss dungeonBoss) {
         this.dungeonBoss = dungeonBoss;
         return this;
+    }
+
+    public Dungeon addMonster(DungeonMonster monster) {
+        this.monsters.add(monster);
+        return this;
+    }
+
+    public List<DungeonMonster> getMonsters() {
+        return monsters;
     }
 }
