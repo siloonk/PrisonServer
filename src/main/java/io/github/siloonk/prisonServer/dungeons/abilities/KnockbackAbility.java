@@ -3,10 +3,11 @@ package io.github.siloonk.prisonServer.dungeons.abilities;
 import io.github.siloonk.prisonServer.utils.Util;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.util.Collection;
 
-public class KnockbackAbility extends BossAbility{
+public class KnockbackAbility extends BossAbility {
 
     /**
      * Keep track of the range in which players are affected
@@ -30,7 +31,8 @@ public class KnockbackAbility extends BossAbility{
     }
 
     @Override
-    public void trigger(Location location) {
+    public void trigger(EntityDamageByEntityEvent event) {
+        Location location = event.getEntity().getLocation();
 
         Collection<Player> players = location.getNearbyPlayers(range);
 

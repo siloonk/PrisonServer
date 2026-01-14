@@ -3,7 +3,6 @@ package io.github.siloonk.prisonServer.dungeons;
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.dungeons.abilities.BossAbility;
-import io.github.siloonk.prisonServer.dungeons.abilities.BossAbilityType;
 import io.github.siloonk.prisonServer.dungeons.rewards.*;
 import io.github.siloonk.prisonServer.utils.ConfigUtils;
 import io.papermc.paper.registry.RegistryAccess;
@@ -72,7 +71,7 @@ public class DungeonManager {
         File file = new File(PrisonServer.getInstance().getDataFolder() + "/config/dungeons");
 
         if (!file.exists()) {
-            PrisonServer.getInstance().saveResource("config/dungeons", false);
+            PrisonServer.getInstance().saveResource("config/dungeons/-example-dungeon.yml", false);
         }
         return file;
     }
@@ -160,7 +159,7 @@ public class DungeonManager {
         // Participation rewards
         ConfigurationSection participationRewardSection = dungeon.getConfigurationSection("participation_rewards");
         List<DungeonReward> participationRewards = new ArrayList<>();
-        for (String key : rewardsSection.getKeys(false)) {
+        for (String key : participationRewardSection.getKeys(false)) {
             DungeonReward reward = generateDungeonReward(participationRewardSection.getConfigurationSection(key));
             if (reward == null) {
                 System.err.printf("Invalid reward found at %s!%n", key);

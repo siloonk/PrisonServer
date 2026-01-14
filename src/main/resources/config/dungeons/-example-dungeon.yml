@@ -33,7 +33,7 @@ dungeon:
 
     '2':
       type: CURRENCY
-      curency: tokens
+      currency: tokens
       amount: 1000000
 
     '3':

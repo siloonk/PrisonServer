@@ -1,5 +1,7 @@
-package io.github.siloonk.prisonServer.dungeons.abilities;
+package io.github.siloonk.prisonServer.dungeons;
 
+import io.github.siloonk.prisonServer.dungeons.abilities.BossAbility;
+import io.github.siloonk.prisonServer.dungeons.abilities.KnockbackAbility;
 import org.bukkit.configuration.ConfigurationSection;
 
 public enum BossAbilityType {

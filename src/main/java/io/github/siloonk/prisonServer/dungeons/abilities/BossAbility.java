@@ -1,7 +1,6 @@
 package io.github.siloonk.prisonServer.dungeons.abilities;
 
-import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public abstract class BossAbility {
 
@@ -13,7 +12,7 @@ public abstract class BossAbility {
 
     /**
      * Executed when the ability is triggered
-     * @param location location of the boss
+     * @param event damage event that triggered this ability
      */
-    public abstract void trigger(Location location);
+    public abstract void trigger(EntityDamageByEntityEvent event);
 }
