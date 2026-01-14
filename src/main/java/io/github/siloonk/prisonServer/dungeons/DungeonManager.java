@@ -6,14 +6,16 @@ import io.github.siloonk.prisonServer.dungeons.rewards.*;
 import io.github.siloonk.prisonServer.utils.ConfigUtils;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
-import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -92,7 +94,7 @@ public class DungeonManager {
         }
         Dungeon generatedDungeon = getDungeonSettings(dungeon);
 
-        List<DungeonMonster> monsters = getDungeonMonsters(monsters);
+        List<DungeonMonster> dungeonMonsters = getDungeonMonsters(monsters);
 
         return generatedDungeon;
     }
@@ -213,7 +215,87 @@ public class DungeonManager {
      * @return a list of all dungeon monsters in the section
      */
     private List<DungeonMonster> getDungeonMonsters(ConfigurationSection section) {
-        return null;
+        List<DungeonMonster> monsters = new ArrayList<>();
+
+        // Try to load all monsters present in the config file
+        for (String monster : section.getKeys(false)) {
+            ConfigurationSection monsterSection = section.getConfigurationSection(monster);
+
+            // Generate the monster
+            DungeonMonster dungeonMonster = getMonster(monsterSection);
+            monsters.add(dungeonMonster);
+        }
+
+        return monsters;
+    }
+
+    /**'
+     * Generate a DungeonMonster object based on the data present in the ConfigurationSection
+     * @param section The section that contains the monster data
+     * @return A dungeon monster based on the configuration section
+     */
+    private DungeonMonster getMonster(ConfigurationSection section) {
+
+        String displayName = section.getString("display_name");
+        EntityType type = EntityType.fromName(section.getString("monster_type"));
+        double movementSpeed = section.getDouble("movement_speed");
+        int maxHealth = section.getInt("max_health");
+        List<PotionEffect> potionEffects = new ArrayList<>();
+
+        // Load potion effects if they are present
+        if (section.contains("potion_effects")) {
+            potionEffects = generatePotionEffects(section.getConfigurationSection("potion_effects"));
+        }
+
+        DungeonMonster monster = new DungeonMonster();
+        monster.setMonsterType(type)
+                .setDisplayName(displayName)
+                .setMovementSpeed(movementSpeed)
+                .setHealth(maxHealth)
+                .setPotionEffect(potionEffects);
+
+
+        // Check for armor
+        if (section.contains("armor")) {
+            ConfigurationSection armorSection = section.getConfigurationSection("armor");
+
+            if (armorSection.contains("helmet")) {
+                monster.setHelmet(generateItem(armorSection.getConfigurationSection("helmet")));
+            }
+
+            if (armorSection.contains("chestplate")) {
+                monster.setChestplate(generateItem(armorSection.getConfigurationSection("chestplate")));
+            }
+
+            if (armorSection.contains("leggings")) {
+                monster.setLeggings(generateItem(armorSection.getConfigurationSection("leggings")));
+            }
+
+            if (armorSection.contains("boots")) {
+                monster.setBoots(generateItem(armorSection.getConfigurationSection("boots")));
+            }
+        }
+
+        return monster;
+    }
+
+
+
+    private List<PotionEffect> generatePotionEffects(ConfigurationSection section) {
+        ArrayList<PotionEffect> effects = new ArrayList<>();
+        for (String key : section.getKeys(false)) {
+            PotionEffectType type = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT).get(NamespacedKey.minecraft(key));
+            if (type == null) {
+                System.err.println("Could not find potion with type " + key + "!");
+                continue;
+            }
+
+            int duration = section.getInt(key + ".duration");
+            int tier = section.getInt(key + ".tier");
+            PotionEffect effect = new PotionEffect(type, duration, tier);
+            effects.add(effect);
+        }
+        return effects;
     }
 
 

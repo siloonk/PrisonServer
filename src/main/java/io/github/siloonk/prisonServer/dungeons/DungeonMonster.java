@@ -4,6 +4,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.List;
+
 public class DungeonMonster {
 
     /**
@@ -32,7 +34,7 @@ public class DungeonMonster {
     private ItemStack leggings;
     private ItemStack boots;
 
-    private PotionEffect potionEffect;
+    private List<PotionEffect> potionEffect;
 
     public String getDisplayName() {
         return displayName;
@@ -67,6 +69,51 @@ public class DungeonMonster {
 
     public DungeonMonster setMonsterType(EntityType monsterType) {
         this.monsterType = monsterType;
+        return this;
+    }
+
+    public ItemStack getHelmet() {
+        return helmet;
+    }
+
+    public DungeonMonster setHelmet(ItemStack helmet) {
+        this.helmet = helmet;
+        return this;
+    }
+
+    public ItemStack getChestplate() {
+        return chestplate;
+    }
+
+    public DungeonMonster setChestplate(ItemStack chestplate) {
+        this.chestplate = chestplate;
+        return this;
+    }
+
+    public ItemStack getLeggings() {
+        return leggings;
+    }
+
+    public DungeonMonster setLeggings(ItemStack leggings) {
+        this.leggings = leggings;
+        return this;
+    }
+
+    public ItemStack getBoots() {
+        return boots;
+    }
+
+    public DungeonMonster setBoots(ItemStack boots) {
+        this.boots = boots;
+        return this;
+    }
+
+    public List<PotionEffect> getPotionEffect() {
+        return potionEffect;
+    }
+
+    public DungeonMonster setPotionEffect(List<PotionEffect> potionEffect) {
+        this.potionEffect = potionEffect;
         return this;
     }
 }
