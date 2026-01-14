@@ -1,6 +1,8 @@
 package io.github.siloonk.prisonServer.dungeons;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 public class DungeonMonster {
 
@@ -24,6 +26,13 @@ public class DungeonMonster {
      * The type of monster to spawn
      */
     private EntityType monsterType;
+
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
+
+    private PotionEffect potionEffect;
 
     public String getDisplayName() {
         return displayName;

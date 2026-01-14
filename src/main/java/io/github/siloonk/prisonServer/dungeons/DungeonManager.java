@@ -4,11 +4,16 @@ import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
 import io.github.siloonk.prisonServer.dungeons.rewards.*;
 import io.github.siloonk.prisonServer.utils.ConfigUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.command.Command;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -202,4 +207,39 @@ public class DungeonManager {
         return null;
     }
 
+    /**
+     * Get a list of all the dungeon monsters defined in this section
+     * @param section Section where all the monsters are defined
+     * @return a list of all dungeon monsters in the section
+     */
+    private List<DungeonMonster> getDungeonMonsters(ConfigurationSection section) {
+        return null;
+    }
+
+
+    /**
+     * Generate a item from the config
+     * @param section section in which the item is defined
+     * @return an item stack with all sections as defined in the configuration section
+     */
+    private ItemStack generateItem(ConfigurationSection section) {
+        Material type = Material.valueOf(section.getString("type").toUpperCase());
+        ItemStack item = new ItemStack(type);
+
+        // Apply all enchantments
+        ConfigurationSection enchants = section.getConfigurationSection("enchantments");
+        if (enchants == null) return item;
+
+        for (String key : enchants.getKeys(false)) {
+            Enchantment ench = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(NamespacedKey.minecraft(key.toLowerCase()));
+            if (ench == null) {
+                System.err.println(key + " Is not a valid enchantment!");
+                return null;
+            }
+            int level = enchants.getInt(key);
+            item.addUnsafeEnchantment(ench, level);
+        }
+
+        return item;
+    }
 }
