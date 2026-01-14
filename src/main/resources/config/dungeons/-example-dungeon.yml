@@ -1,8 +1,5 @@
-boss:
-  display_name: "<red>Example Boss"
-  max_health: 500
-  movement_speed: 1.5
-
+dungeon:
+  name: "<red>Example Dungeon"
   player_spawn:
     x: 100
     y: 100
@@ -49,6 +46,12 @@ boss:
       type: ITEM
       id: COMMON_KEY
       amount: 5
+
+
+boss:
+  display_name: "<red>Example Boss"
+  max_health: 500
+  movement_speed: 1.5
 
   abilities:
     1:
