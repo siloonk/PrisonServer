@@ -1,14 +1,19 @@
 package io.github.siloonk.prisonServer.dungeons;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import io.github.siloonk.prisonServer.data.Currency;
+import io.github.siloonk.prisonServer.dungeons.rewards.*;
 import io.github.siloonk.prisonServer.utils.ConfigUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class DungeonManager {
@@ -80,14 +85,31 @@ public class DungeonManager {
         if (dungeon == null) {
             return null;
         }
+        Dungeon generatedDungeon = getDungeonSettings(dungeon);
 
+        List<DungeonMonster> monsters = getDungeonMonsters(monsters);
+
+        return generatedDungeon;
+    }
+
+    /**
+     * Generate a dungeon with the basic dungeon settings present
+     * @param dungeon the configuration section with all the dungeon settings
+     * @return a dungeon object with all dungeon settings applied
+     */
+    private Dungeon getDungeonSettings(ConfigurationSection dungeon) {
         // Make sure all REQUIRED parts of the dungeon config are present
         boolean isValidDungeon = checkDungeonSection(dungeon);
 
+        if (!isValidDungeon) {
+            return null;
+        }
 
         // Generate the dungeon from the data within the dungeon section
         Dungeon generatedDungeon = new Dungeon();
         generatedDungeon.setName(dungeon.getString("name"));
+
+        // Set the spawn for the players
         generatedDungeon.setPlayerSpawn(
             ConfigUtils.getLocation(
                 dungeon.getConfigurationSection("player_spawn")
@@ -95,23 +117,89 @@ public class DungeonManager {
         );
 
 
+        // Rewards
+        ConfigurationSection rewardsSection = dungeon.getConfigurationSection("rewards");
+        List<DungeonReward> rewards = new ArrayList<>();
+        for (String key : rewardsSection.getKeys(false)) {
+            DungeonReward reward = generateDungeonReward(rewardsSection.getConfigurationSection(key));
+            if (reward == null) {
+                System.err.printf("Invalid reward found at %s!%n", key);
+                return null;
+            }
+
+            rewards.add(reward);
+        }
+
+        generatedDungeon.setRewards(rewards);
+
+
+        // Participation rewards
+        ConfigurationSection participationRewardSection = dungeon.getConfigurationSection("participation_rewards");
+        List<DungeonReward> participationRewards = new ArrayList<>();
+        for (String key : rewardsSection.getKeys(false)) {
+            DungeonReward reward = generateDungeonReward(participationRewardSection.getConfigurationSection(key));
+            if (reward == null) {
+                System.err.printf("Invalid reward found at %s!%n", key);
+                return null;
+            }
+
+            rewards.add(reward);
+        }
+        generatedDungeon.setRewards(participationRewards);
+
         return generatedDungeon;
     }
 
+    /**
+     * Make sure the dungeon configuration section has all the required
+     * settings to generate the dungeon
+     * @param section the section that contains all dungeon settings
+     * @return whether the dungeon section is valid
+     */
     private boolean checkDungeonSection(ConfigurationSection section) {
+        // Check for all the basic keys
         if (!section.contains("name")) return false;
+        if (!section.contains("player_spawn")) return false;
+        if (!section.contains("boss_spawn")) return false;
+        if (!section.contains("rewards")) return false;
+        if (!section.contains("participation_rewards")) return false;
 
         // Player spawn
-        if (!section.contains("player_spawn")) return false;
         if (!ConfigUtils.isValidLocation(section.getConfigurationSection("player_spawn"))) return false;
 
         // Boss spawn
-        if (!section.contains("boss_spawn")) return false;
-        if (!ConfigUtils.isValidLocation(section.getConfigurationSection("boss_spawn"))) return false;
+        return ConfigUtils.isValidLocation(section.getConfigurationSection("boss_spawn"));
+    }
 
-        // Rewards
+    /**
+     * Generate a dungeon reward based on its type, if the type is invalid we return null
+     * @param section the section in which the reward data is present
+     * @return a dungeon reward if the type is valid and null if not
+     */
+    private DungeonReward generateDungeonReward(ConfigurationSection section) {
+        DungeonRewardType type = DungeonRewardType.valueOf(section.getString("type").toUpperCase());
 
-        return true;
+        if (type == DungeonRewardType.ITEM) {
+            return new ItemDungeonReward(
+                section.getString("id"),
+                section.contains("amount") ? section.getInt("amount") : 1
+            );
+        }
+
+        if (type == DungeonRewardType.COMMAND) {
+            return new CommandDungeonReward(
+                section.getString("command")
+            );
+        }
+
+        if (type == DungeonRewardType.CURRENCY) {
+            return new CurrencyDungeonReward(
+                Currency.valueOf(section.getString("currency").toUpperCase()),
+                section.getInt("amount")
+            );
+        }
+
+        return null;
     }
 
 }

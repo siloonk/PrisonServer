@@ -1,5 +1,6 @@
 package io.github.siloonk.prisonServer.dungeons;
 
+import io.github.siloonk.prisonServer.dungeons.rewards.DungeonReward;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -38,6 +39,39 @@ public class Dungeon {
      */
     private DungeonBoss dungeonBoss;
 
+    /**
+     * Keep track of all the rewards present in the dungeon
+     * These rewards are for the top damage dealt
+     */
+    private List<DungeonReward> rewards = new ArrayList<>();
+
+    /**
+     * Keep track of all the participation rewards present in the dungeon
+     */
+    private List<DungeonReward> participationRewards = new ArrayList<>();
+
+    public Dungeon setMonsters(List<DungeonMonster> monsters) {
+        this.monsters = monsters;
+        return this;
+    }
+
+    public List<DungeonReward> getRewards() {
+        return rewards;
+    }
+
+    public Dungeon setRewards(List<DungeonReward> rewards) {
+        this.rewards = rewards;
+        return this;
+    }
+
+    public List<DungeonReward> getParticipationRewards() {
+        return participationRewards;
+    }
+
+    public Dungeon setParticipationRewards(ArrayList<DungeonReward> participationRewards) {
+        this.participationRewards = participationRewards;
+        return this;
+    }
 
     public Location getPlayerSpawn() {
         return playerSpawn;
