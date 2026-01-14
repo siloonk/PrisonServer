@@ -44,10 +44,6 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
-tasks.shadowJar {
-    destinationDirectory.set(file("C:\\Users\\Sil\\Documents\\Minecraft Servers\\Prisons\\plugins"))
-}
-
 processResources {
     def props = [version: version]
     inputs.properties props
