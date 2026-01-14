@@ -12,6 +12,8 @@ import io.github.siloonk.prisonServer.crates.CratesManager;
 import io.github.siloonk.prisonServer.data.mines.MineManager;
 import io.github.siloonk.prisonServer.data.players.PrisonPlayerManager;
 import io.github.siloonk.prisonServer.data.relics.RelicManager;
+import io.github.siloonk.prisonServer.dungeons.Dungeon;
+import io.github.siloonk.prisonServer.dungeons.DungeonManager;
 import io.github.siloonk.prisonServer.enchantments.EnchantmentHandler;
 import io.github.siloonk.prisonServer.inventories.EnchantmentInventory;
 import io.github.siloonk.prisonServer.inventories.RelicInventory;
@@ -32,6 +34,7 @@ public final class PrisonServer extends JavaPlugin {
     private CrateBlocksManager crateBlocksManager;
     private ProtocolManager protocolManager;
     private RelicManager relicManager;
+    private DungeonManager dungeonManager;
 
     @Override
     public void onEnable() {
@@ -45,6 +48,7 @@ public final class PrisonServer extends JavaPlugin {
         cratesManager = new CratesManager();
         crateBlocksManager = new CrateBlocksManager();
         relicManager = new RelicManager();
+        dungeonManager = new DungeonManager();
         registerEvents();
         registerCommands();
     }
@@ -52,6 +56,10 @@ public final class PrisonServer extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    public DungeonManager getDungeonManager() {
+        return dungeonManager;
     }
 
     public Database getDatabase() {

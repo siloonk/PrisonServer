@@ -1,8 +1,10 @@
 package io.github.siloonk.prisonServer.dungeons.abilities;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 
 public abstract class BossAbility {
+
 
     /**
      * Name of the ability

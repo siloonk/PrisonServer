@@ -2,6 +2,7 @@ package io.github.siloonk.prisonServer.dungeons;
 
 import io.github.siloonk.prisonServer.dungeons.abilities.BossAbility;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,17 +24,22 @@ public class DungeonBoss {
     /**
      * Keep track of all boss abilities per phase
      */
-    private Map<Integer, BossAbility> abilities = new HashMap<>();
+    private Map<Integer, List<BossAbility>> abilities = new HashMap<>();
 
     /**
      * Keep track of the boss's movement speed
      */
-    private float movementSpeed;
+    private double movementSpeed;
 
     /**
      * Keep track of the entity type
      */
     private EntityType bossType;
+
+    private ItemStack helmet;
+    private ItemStack chestplate;
+    private ItemStack leggings;
+    private ItemStack boots;
 
     /**
      * Keep track of all monsters that can spawn based on the phase
@@ -45,12 +51,12 @@ public class DungeonBoss {
         return this;
     }
 
-    public DungeonBoss setAbilities(Map<Integer, BossAbility> abilities) {
+    public DungeonBoss setAbilities(Map<Integer, List<BossAbility>> abilities) {
         this.abilities = abilities;
         return this;
     }
 
-    public DungeonBoss setMovementSpeed(float movementSpeed) {
+    public DungeonBoss setMovementSpeed(double movementSpeed) {
         this.movementSpeed = movementSpeed;
         return this;
     }
@@ -69,11 +75,11 @@ public class DungeonBoss {
         return health;
     }
 
-    public Map<Integer, BossAbility> getAbilities() {
+    public Map<Integer, List<BossAbility>> getAbilities() {
         return abilities;
     }
 
-    public float getMovementSpeed() {
+    public double getMovementSpeed() {
         return movementSpeed;
     }
 
@@ -91,6 +97,42 @@ public class DungeonBoss {
 
     public DungeonBoss setDisplayName(String displayName) {
         this.displayName = displayName;
+        return this;
+    }
+
+    public ItemStack getHelmet() {
+        return helmet;
+    }
+
+    public DungeonBoss setHelmet(ItemStack helmet) {
+        this.helmet = helmet;
+        return this;
+    }
+
+    public ItemStack getChestplate() {
+        return chestplate;
+    }
+
+    public DungeonBoss setChestplate(ItemStack chestplate) {
+        this.chestplate = chestplate;
+        return this;
+    }
+
+    public ItemStack getLeggings() {
+        return leggings;
+    }
+
+    public DungeonBoss setLeggings(ItemStack leggings) {
+        this.leggings = leggings;
+        return this;
+    }
+
+    public ItemStack getBoots() {
+        return boots;
+    }
+
+    public DungeonBoss setBoots(ItemStack boots) {
+        this.boots = boots;
         return this;
     }
 }

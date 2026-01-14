@@ -52,6 +52,7 @@ boss:
   display_name: "<red>Example Boss"
   max_health: 500
   movement_speed: 1.5
+  entity_type: DROWNED
 
   abilities:
     1:
@@ -60,17 +61,6 @@ boss:
         range: 10
         force: 5
         damage: 0
-
-    2:
-      disarm:
-      knockback:
-        range: 10
-        force: 7
-        damage: 2
-      enraged:
-      ultimate_defense:
-        shields: 5
-        health: 50
 
   # All monsters per phase
   monsters:

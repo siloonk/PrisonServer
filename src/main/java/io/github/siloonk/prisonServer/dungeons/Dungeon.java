@@ -4,6 +4,7 @@ import io.github.siloonk.prisonServer.dungeons.rewards.DungeonReward;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Dungeon {
@@ -27,7 +28,7 @@ public class Dungeon {
     /**
      * Keep track of all dungeon monsters that can be spawned within this dungeon
      */
-    private List<DungeonMonster> monsters = new ArrayList<>();
+    private HashMap<String, DungeonMonster> monsters = new HashMap<>();
 
     /**
      * Name of the dungeon
@@ -50,10 +51,6 @@ public class Dungeon {
      */
     private List<DungeonReward> participationRewards = new ArrayList<>();
 
-    public Dungeon setMonsters(List<DungeonMonster> monsters) {
-        this.monsters = monsters;
-        return this;
-    }
 
     public List<DungeonReward> getRewards() {
         return rewards;
@@ -118,12 +115,17 @@ public class Dungeon {
         return this;
     }
 
-    public Dungeon addMonster(DungeonMonster monster) {
-        this.monsters.add(monster);
+    public HashMap<String, DungeonMonster> getMonsters() {
+        return monsters;
+    }
+
+    public Dungeon setMonsters(HashMap<String, DungeonMonster> monsters) {
+        this.monsters = monsters;
         return this;
     }
 
-    public List<DungeonMonster> getMonsters() {
-        return monsters;
+    public Dungeon setParticipationRewards(List<DungeonReward> participationRewards) {
+        this.participationRewards = participationRewards;
+        return this;
     }
 }

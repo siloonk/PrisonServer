@@ -2,6 +2,8 @@ package io.github.siloonk.prisonServer.dungeons;
 
 import io.github.siloonk.prisonServer.PrisonServer;
 import io.github.siloonk.prisonServer.data.Currency;
+import io.github.siloonk.prisonServer.dungeons.abilities.BossAbility;
+import io.github.siloonk.prisonServer.dungeons.abilities.BossAbilityType;
 import io.github.siloonk.prisonServer.dungeons.rewards.*;
 import io.github.siloonk.prisonServer.utils.ConfigUtils;
 import io.papermc.paper.registry.RegistryAccess;
@@ -15,7 +17,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,6 +29,10 @@ public class DungeonManager {
      * List of all dungeons
      */
     private HashMap<String, Dungeon> dungeons = new HashMap<>();
+
+    public DungeonManager() {
+        loadDungeons();
+    }
 
     /**
      * Load all dungeons from the dungeon config
@@ -51,6 +56,9 @@ public class DungeonManager {
                 System.err.println("Something went wrong trying to load the dungeon from file: " + file.getName());
                 continue;
             }
+
+            String id = file.getName().split("\\.")[0];
+            dungeons.put(id, dungeon);
         }
 
     }
@@ -94,7 +102,16 @@ public class DungeonManager {
         }
         Dungeon generatedDungeon = getDungeonSettings(dungeon);
 
-        List<DungeonMonster> dungeonMonsters = getDungeonMonsters(monsters);
+
+        // Make sure we actually generated a dungeon before proceeding
+        if (generatedDungeon == null) return null;
+
+        HashMap<String, DungeonMonster> dungeonMonsters = getDungeonMonsters(monsters);
+        generatedDungeon.setMonsters(dungeonMonsters);
+
+
+        DungeonBoss dungeonBoss = getDungeonBoss(boss, generatedDungeon);
+
 
         return generatedDungeon;
     }
@@ -214,8 +231,8 @@ public class DungeonManager {
      * @param section Section where all the monsters are defined
      * @return a list of all dungeon monsters in the section
      */
-    private List<DungeonMonster> getDungeonMonsters(ConfigurationSection section) {
-        List<DungeonMonster> monsters = new ArrayList<>();
+    private HashMap<String, DungeonMonster> getDungeonMonsters(ConfigurationSection section) {
+        HashMap<String, DungeonMonster> monsters = new HashMap<>();
 
         // Try to load all monsters present in the config file
         for (String monster : section.getKeys(false)) {
@@ -223,7 +240,7 @@ public class DungeonManager {
 
             // Generate the monster
             DungeonMonster dungeonMonster = getMonster(monsterSection);
-            monsters.add(dungeonMonster);
+            monsters.put(monster, dungeonMonster);
         }
 
         return monsters;
@@ -279,7 +296,83 @@ public class DungeonManager {
         return monster;
     }
 
+    /**
+     * Load the basic data of the dungeon and store it in the dungeon boss
+     * @param section
+     * @return
+     */
+    private DungeonBoss getDungeonBoss(ConfigurationSection section, Dungeon dungeon) {
+        DungeonBoss boss = new DungeonBoss();
+        String displayName = section.getString("display_name");
+        int maxHealth = section.getInt("max_health");
+        double movementSpeed = section.getDouble("movement_speed");
+        EntityType type = EntityType.fromName(section.getString("entity_type"));
 
+        HashMap<Integer, List<DungeonMonster>> monsters = new HashMap<>();
+
+        // Load the monsters
+        ConfigurationSection monsterSection = section.getConfigurationSection("monsters");
+        for (String key : monsterSection.getKeys(false)) {
+            // Load all monsters from the list
+            List<DungeonMonster> monsterList = new ArrayList<>();
+            List<String> monsterIds = monsterSection.getStringList(key);
+            for (String id : monsterIds) {
+                monsterList.add(dungeon.getMonsters().get(id));
+            }
+
+            // Add the monsters for this phase to the hashmap
+            monsters.put(Integer.parseInt(key), monsterList);
+        }
+
+        HashMap<Integer, List<BossAbility>> abilities = new HashMap<>();
+
+        // Load the abilities
+        ConfigurationSection abilitySection = section.getConfigurationSection("abilities");
+        for (String phase : abilitySection.getKeys(false)) {
+            List<BossAbility> abilityList = new ArrayList<>();
+            ConfigurationSection phaseSection = abilitySection.getConfigurationSection(phase);
+
+            // Load all abilities
+            for (String ability : phaseSection.getKeys(false)) {
+                BossAbilityType abilityType = BossAbilityType.valueOf(ability.toUpperCase());
+                abilityList.add(abilityType.generateAbility(phaseSection.getConfigurationSection(ability)));
+            }
+
+            // Register the ability to the boss
+            abilities.put(Integer.parseInt(phase), abilityList);
+        }
+
+        // Generate the basics of the boss
+        boss.setBossType(type)
+                .setDisplayName(displayName)
+                .setHealth(maxHealth)
+                .setMovementSpeed(movementSpeed)
+                .setAbilities(abilities)
+                .setDungeonMonsters(monsters);
+
+        // Load the armor
+        if (section.contains("armor")) {
+            ConfigurationSection armorSection = section.getConfigurationSection("armor");
+
+            if (armorSection.contains("helmet")) {
+                boss.setHelmet(generateItem(armorSection.getConfigurationSection("helmet")));
+            }
+
+            if (armorSection.contains("chestplate")) {
+                boss.setChestplate(generateItem(armorSection.getConfigurationSection("chestplate")));
+            }
+
+            if (armorSection.contains("leggings")) {
+                boss.setLeggings(generateItem(armorSection.getConfigurationSection("leggings")));
+            }
+
+            if (armorSection.contains("boots")) {
+                boss.setBoots(generateItem(armorSection.getConfigurationSection("boots")));
+            }
+        }
+
+        return boss;
+    }
 
     private List<PotionEffect> generatePotionEffects(ConfigurationSection section) {
         ArrayList<PotionEffect> effects = new ArrayList<>();
@@ -297,7 +390,6 @@ public class DungeonManager {
         }
         return effects;
     }
-
 
     /**
      * Generate a item from the config
