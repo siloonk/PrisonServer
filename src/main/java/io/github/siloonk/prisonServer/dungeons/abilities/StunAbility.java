@@ -1,6 +1,7 @@
 package io.github.siloonk.prisonServer.dungeons.abilities;
 
 import io.github.siloonk.prisonServer.PrisonServer;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -22,12 +23,15 @@ public class StunAbility extends BossAbility {
         float walkSpeed = player.getWalkSpeed();
         player.setWalkSpeed(0);
         // Hopefully this prevents the player from jumping?
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 100, 128));
+//        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 100, 128));
 
+        double jumpStrength = player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getBaseValue();
+        player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(0);
         new BukkitRunnable() {
             @Override
             public void run() {
                 player.setWalkSpeed(walkSpeed);
+                player.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(jumpStrength);
             }
         }.runTaskLater(PrisonServer.getInstance(), 5*20L);
 
