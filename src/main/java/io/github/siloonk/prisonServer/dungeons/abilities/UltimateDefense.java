@@ -1,10 +1,14 @@
 package io.github.siloonk.prisonServer.dungeons.abilities;
 
+import io.github.siloonk.prisonServer.PDCKeys;
+import io.github.siloonk.prisonServer.PrisonServer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
 import org.joml.AxisAngle4f;
 import org.joml.Vector3d;
@@ -31,27 +35,55 @@ public class UltimateDefense extends BossAbility{
 
 
         for (int i = 0; i < shields; i++) {
-            double angle = (theta * i+1);
+            double startAngle = (theta * i+1);
 
-            double x = centerX + (DISTANCE * Math.cos(angle));
-            double z = centerZ + (DISTANCE * Math.sin(angle));
+            double x = centerX + (DISTANCE * Math.cos(startAngle));
+            double z = centerZ + (DISTANCE * Math.sin(startAngle));
 
             Location loc = new Location(event.getEntity().getWorld(), x, event.getEntity().getLocation().getY(), z);
 
             ItemDisplay display = loc.getWorld().spawn(loc, ItemDisplay.class, entity -> {
                 entity.setItemStack(ItemStack.of(Material.SHIELD));
                 entity.setPersistent(false);
-                entity.setTransformation(
-                    new Transformation(
-                        new Vector3f(),
-                        new AxisAngle4f(),
-                        new Vector3f(3, 3, 3),
-                        new AxisAngle4f()
-                    )
-                );
-
-
+                entity.setInterpolationDelay(0);
+                entity.setInterpolationDuration(1);
             });
+            display.getPersistentDataContainer().set(PDCKeys.HEALTH, PersistentDataType.INTEGER, shieldHealth);
+
+            new BukkitRunnable() {
+
+                double angle = startAngle;
+
+                @Override
+                public void run() {
+                    if (!display.isValid()) {
+                        display.remove();
+                        cancel();
+                        return;
+                    }
+
+                    if (display.getPersistentDataContainer().get(PDCKeys.HEALTH, PersistentDataType.INTEGER) <= 0) {
+                        display.remove();
+                        cancel();
+                        return;
+                    }
+
+                    angle += 0.05;
+
+                    float x = (float) (DISTANCE * Math.cos(angle));
+                    float z = (float) (DISTANCE * Math.sin(angle));
+
+                    Transformation transformation = new Transformation(
+                            new Vector3f(x, 1.2f, z),   // translation
+                            new AxisAngle4f(),           // left rotation
+                            new Vector3f(3, 3, 3),       // scale
+                            new AxisAngle4f()            // right rotation
+                    );
+
+                    display.setTransformation(transformation);
+                }
+
+            }.runTaskTimer(PrisonServer.getInstance(), 0L, 1L);
         }
     }
 }

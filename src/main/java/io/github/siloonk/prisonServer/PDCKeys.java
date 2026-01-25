@@ -38,4 +38,6 @@ public class PDCKeys {
     public static final NamespacedKey ORIGIN_ITEM_NAME = new NamespacedKey("prisons", "original_item_name");
 
     public static final NamespacedKey ID = new NamespacedKey("prisons", "id");
+
+    public static final NamespacedKey HEALTH = new NamespacedKey("prisons", "health");
 }
